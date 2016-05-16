@@ -153,6 +153,16 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         public const string HyperVReplicaAzure = "HyperVReplicaAzure";
 
         /// <summary>
+        /// Represents InMageAzureV2 string constant.
+        /// </summary>
+        public const string InMageAzureV2 = "InMageAzureV2";
+
+        /// <summary>
+        /// Represents InMageAzure string constant.
+        /// </summary>
+        public const string InMageAzure = "InMageAzure";
+
+        /// <summary>
         /// Represents San string constant.
         /// </summary>
         public const string San = "San";
@@ -296,9 +306,20 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// Nic Selection Type - SelectedByUser
         /// </summary>
         public const string SelectedByUser = "SelectedByUser";
+
+        /// <summary>
+        /// No license type for HUB https://azure.microsoft.com/en-in/pricing/hybrid-use-benefit/
+        /// </summary>
+        public const string NoLicenseType = "NoLicenseType";
+
+        /// <summary>
+        /// The license type windows server for
+        /// HUB https://azure.microsoft.com/en-in/pricing/hybrid-use-benefit/
+        /// </summary>
+        public const string LicenseTypeWindowsServer = "WindowsServer";
     }
 
-     /// <summary>
+    /// <summary>
     /// ARM Resource Type Constants
     /// </summary>
     public static class ARMResourceTypeConstants
@@ -347,7 +368,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// Replication Protected Items
         /// </summary>
         public const string ReplicationProtectedItems = "replicationProtectedItems";
-        
+
         /// <summary>
         /// Replication Networks
         /// </summary>
