@@ -150,9 +150,12 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             string licenseType = this.LicenseType;
             List<VMNicInputDetails> vMNicInputDetailsList = new List<VMNicInputDetails>();
             VMNicDetails vMNicDetailsToBeUpdated;
+            UpdateReplicationProtectedItemProviderInput providerSpecificInput = new UpdateReplicationProtectedItemProviderInput();
 
             if (0 == string.Compare(provider, Constants.HyperVReplicaAzure, StringComparison.OrdinalIgnoreCase))
             {
+                providerSpecificInput = new HyperVReplicaAzureUpdateReplicationProtectedItemInput();
+
                 HyperVReplicaAzureReplicationDetails providerSpecificDetails =
                     (HyperVReplicaAzureReplicationDetails)replicationProtectedItemResponse.ReplicationProtectedItem.Properties.ProviderSpecificDetails;
 
@@ -229,6 +232,8 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             }
             else if (0 == string.Compare(provider, Constants.InMageAzureV2, StringComparison.OrdinalIgnoreCase))
             {
+                providerSpecificInput = new InMageAzureV2UpdateReplicationProtectedItemInput();
+
                 InMageAzureV2ProviderSpecificSettings providerSpecificDetails =
                     (InMageAzureV2ProviderSpecificSettings)replicationProtectedItemResponse.ReplicationProtectedItem.Properties.ProviderSpecificDetails;
 
@@ -310,7 +315,8 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     RecoveryAzureVMSize = vmSize,
                     SelectedRecoveryAzureNetworkId = vmRecoveryNetworkId,
                     VmNics = vMNicInputDetailsList,
-                    LicenseType = licenseType
+                    LicenseType = licenseType,
+                    ProviderSpecificDetails = providerSpecificInput
                 };
 
             UpdateReplicationProtectedItemInput input = new UpdateReplicationProtectedItemInput()
