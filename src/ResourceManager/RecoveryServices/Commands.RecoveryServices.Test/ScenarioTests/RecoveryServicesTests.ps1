@@ -27,7 +27,7 @@ function Test-RecoveryServicesVaultCRUDTests
 	Assert-NotNull($vaultCreationResponse.Type)
 
 	# Enumerate Vaults
-	$vaults = Get-AzureRmRecoveryServicesVault -Name rsv1 -ResourceGroupName RsvTestRG
+	$vaults = Get-AzureRmRecoveryServicesVault
 	Assert-True { $vaults.Count -gt 0 }
 	Assert-NotNull($vaults)
 	foreach($vault in $vaults)
@@ -47,6 +47,14 @@ function Test-RecoveryServicesVaultCRUDTests
 	Assert-NotNull($vaultToBeProcessed.Name)
 	Assert-NotNull($vaultToBeProcessed.ID)
 	Assert-NotNull($vaultToBeProcessed.Type)
+
+	# Download vault settings file
+	$vaultFile = Get-AzureRmRecoveryServicesVaultSettingsFile -Vault $vaultToBeProcessed
+	Assert-NotNull($vaultFile.Filepath)
+
+	# Read file and check for data
+	[xml]$xmlDocument = Get-Content -Path $vaultFile.Filepath
+	Assert-NotNull($xmlDocument.ASRVaultCreds.Location)
 
 	# Remove Vault
 	Remove-AzureRmRecoveryServicesVault -Vault $vaultToBeProcessed
