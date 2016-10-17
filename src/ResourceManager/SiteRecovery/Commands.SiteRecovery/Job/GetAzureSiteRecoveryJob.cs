@@ -13,6 +13,7 @@
 // ----------------------------------------------------------------------------------
 
 using Microsoft.Azure.Management.SiteRecovery.Models;
+using Microsoft.Rest.Azure.OData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -112,7 +113,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// </summary>
         private void GetByName()
         {
-            //this.WriteJob(RecoveryServicesClient.GetAzureSiteRecoveryJobDetails(this.Name).Job);
+            this.WriteJob(RecoveryServicesClient.GetAzureSiteRecoveryJobDetails(DefaultProfile.Context, this.Name));
         }
         
         /// <summary>
@@ -120,7 +121,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// </summary>
         private void GetByParam()
         {
-            /*JobQueryParameter jqp = new JobQueryParameter();
+            JobQueryParameter jqp = new JobQueryParameter();
 
             if (this.StartTime.HasValue)
             {
@@ -137,21 +138,21 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 jqp.JobStatus = new List<string>();
                 jqp.JobStatus.Add(this.State);
             }
-            */
 
-           JobCollection completeJobsList = RecoveryServicesClient.GetAzureSiteRecoveryJob(DefaultProfile.Context);
 
-            /*
+           ODataQuery<JobQueryParameter> odataQuery = new ODataQuery<JobQueryParameter>(jqp.ToQueryString().ToString());
+           JobCollection completeJobsList = RecoveryServicesClient.GetAzureSiteRecoveryJob(DefaultProfile.Context, odataQuery);
+            
             // Filtering TargetObjectId
-            IEnumerable<Management.SiteRecovery.Models.Job> filteredJobsList = completeJobsList.ToArray().AsEnumerable();
+            IEnumerable<Management.SiteRecovery.Models.Job> filteredJobsList = completeJobsList.Value.ToArray().AsEnumerable();
             if (this.TargetObjectId != null)
             {
                 filteredJobsList = filteredJobsList.Where(j => 0 == string.Compare(j.Properties.TargetObjectId.ToString(),
                      this.TargetObjectId.ToString(), StringComparison.OrdinalIgnoreCase));
             }
-            */
+            
 
-            this.WriteJobs(completeJobsList.Value);
+            this.WriteJobs(filteredJobsList.ToList());
         }
         
         /// <summary>

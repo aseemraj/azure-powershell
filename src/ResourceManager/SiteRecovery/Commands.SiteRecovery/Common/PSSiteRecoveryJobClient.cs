@@ -14,6 +14,7 @@
 
 using Microsoft.Azure.Management.SiteRecovery;
 using Microsoft.Azure.Management.SiteRecovery.Models;
+using Microsoft.Rest.Azure.OData;
 
 namespace Microsoft.Azure.Commands.SiteRecovery
 {
@@ -22,25 +23,25 @@ namespace Microsoft.Azure.Commands.SiteRecovery
     /// </summary>
     public partial class PSRecoveryServicesClient
     {
-        /*
+        
         /// <summary>
         /// Gets Azure Site Recovery Job details.
         /// </summary>
         /// <param name="jobName">Job ID</param>
         /// <returns>Job response</returns>
-        public JobResponse GetAzureSiteRecoveryJobDetails(string jobName)
+        public Job GetAzureSiteRecoveryJobDetails(Common.Authentication.Models.AzureContext context, string jobName)
         {
-            return this.GetSiteRecoveryClient().Jobs.Get(jobName, this.GetRequestHeaders(false));
+            return this.GetSiteRecoveryClient(context).JobsController.GetJob(jobName);
         }
-         * */
+        
 
         /// <summary>
         /// Get Azure Site Recovery Job.
         /// </summary>
         /// <returns>Job list response</returns>
-        public JobCollection GetAzureSiteRecoveryJob(Common.Authentication.Models.AzureContext context)
+        public JobCollection GetAzureSiteRecoveryJob(Common.Authentication.Models.AzureContext context, ODataQuery<JobQueryParameter> odataQuery)
         {
-            return this.GetSiteRecoveryClient(context).JobsController.EnumerateJobs();
+            return this.GetSiteRecoveryClient(context).JobsController.EnumerateJobs(odataQuery);
         }
 
         /*
