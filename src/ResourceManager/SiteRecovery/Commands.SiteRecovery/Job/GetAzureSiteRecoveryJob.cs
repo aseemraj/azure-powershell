@@ -112,15 +112,15 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// </summary>
         private void GetByName()
         {
-            this.WriteJob(RecoveryServicesClient.GetAzureSiteRecoveryJobDetails(this.Name).Job);
+            //this.WriteJob(RecoveryServicesClient.GetAzureSiteRecoveryJobDetails(this.Name).Job);
         }
-
+        
         /// <summary>
         /// Queries by Parameters.
         /// </summary>
         private void GetByParam()
         {
-            JobQueryParameter jqp = new JobQueryParameter();
+            /*JobQueryParameter jqp = new JobQueryParameter();
 
             if (this.StartTime.HasValue)
             {
@@ -137,9 +137,11 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 jqp.JobStatus = new List<string>();
                 jqp.JobStatus.Add(this.State);
             }
+            */
 
-            IList<Management.SiteRecovery.Models.Job> completeJobsList = RecoveryServicesClient.GetAzureSiteRecoveryJob(jqp).Jobs;
+           JobCollection completeJobsList = RecoveryServicesClient.GetAzureSiteRecoveryJob(DefaultProfile.Context);
 
+            /*
             // Filtering TargetObjectId
             IEnumerable<Management.SiteRecovery.Models.Job> filteredJobsList = completeJobsList.ToArray().AsEnumerable();
             if (this.TargetObjectId != null)
@@ -147,10 +149,11 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 filteredJobsList = filteredJobsList.Where(j => 0 == string.Compare(j.Properties.TargetObjectId.ToString(),
                      this.TargetObjectId.ToString(), StringComparison.OrdinalIgnoreCase));
             }
+            */
 
-            this.WriteJobs(filteredJobsList.ToList());
+            this.WriteJobs(completeJobsList.Value);
         }
-
+        
         /// <summary>
         /// Writes Job.
         /// </summary>

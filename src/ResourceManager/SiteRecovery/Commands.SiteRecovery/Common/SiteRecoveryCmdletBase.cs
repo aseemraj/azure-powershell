@@ -15,7 +15,6 @@
 using Hyak.Common;
 using Microsoft.Azure.Commands.ResourceManager.Common;
 using Microsoft.Azure.Management.SiteRecovery.Models;
-using Microsoft.Azure.Management.SiteRecoveryVault.Models;
 using Newtonsoft.Json;
 using System;
 using System.Runtime.Serialization;
@@ -61,6 +60,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// </summary>
         public virtual void ExecuteSiteRecoveryCmdlet()
         {
+            SiteRecoveryAutoMapperProfile.Initialize();
             // Do Nothing
         }
 
@@ -171,7 +171,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     ex);
             }
         }
-
+        /*
         /// <summary>
         /// Waits for the job to complete.
         /// </summary>
@@ -197,6 +197,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                         this.StopProcessingFlag));
             return jobResponse;
         }
+        */
 
         /// <summary>
         /// Handles interrupts.
@@ -229,29 +230,6 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     Properties.Resources.IDBasedParamUsageNotSupportedFromNextRelease,
                     paramName));
             }
-        }
-
-        /// <summary>
-        /// Gets the current vault location.
-        /// </summary>
-        /// <returns>The current vault location.</returns>
-        protected string GetCurrentVaultLocation()
-        {
-            string location = string.Empty;
-
-            VaultListResponse vaultListResponse =
-                RecoveryServicesClient.GetVaultsInResouceGroup(PSRecoveryServicesClient.asrVaultCreds.ResourceGroupName);
-
-            foreach (Vault vault in vaultListResponse.Vaults)
-            {
-                if (0 == string.Compare(PSRecoveryServicesClient.asrVaultCreds.ResourceName, vault.Name, true))
-                {
-                    location = vault.Location;
-                    break;
-                }
-            }
-
-            return location;
         }
     }
 }

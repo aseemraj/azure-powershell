@@ -102,9 +102,11 @@ namespace Microsoft.Azure.Commands.SiteRecovery
 
             Utilities.UpdateCurrentVaultContext(asrVaultCreds);
 
+            /*
             RecoveryServicesClient.ValidateVaultSettings(
                 asrVaultCreds.ResourceName,
                 asrVaultCreds.ResourceGroupName);
+                */
 
             this.WriteObject(new ASRVaultSettings(asrVaultCreds));
         }

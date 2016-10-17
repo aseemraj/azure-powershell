@@ -16,8 +16,6 @@ using Microsoft.Azure.Commands.Common.Authentication;
 using Microsoft.Azure.Commands.Common.Authentication.Models;
 using Microsoft.Azure.Management.SiteRecovery;
 using Microsoft.Azure.Management.SiteRecovery.Models;
-using Microsoft.Azure.Management.SiteRecoveryVault;
-using Microsoft.Azure.Management.SiteRecoveryVault.Models;
 using Microsoft.Azure.Portal.RecoveryServices.Models.Common;
 using System;
 using System.Collections.Generic;
@@ -44,16 +42,6 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// </summary>
         public string ClientRequestId { get; set; }
 
-        /// <summary>
-        /// Gets the value of recovery services management client.
-        /// </summary>
-        public SiteRecoveryVaultManagementClient GetRecoveryServicesClient
-        {
-            get
-            {
-                return this.recoveryServicesClient;
-            }
-        }
 
         /// <summary>
         /// Amount of time to sleep before fetching job details again.
@@ -70,11 +58,6 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         public static ASRVaultCreds asrVaultCreds = new ASRVaultCreds();
 
         public static string idPrefixtillvaultName = string.Empty;
-
-        /// <summary>
-        /// Recovery Services client.
-        /// </summary>
-        private SiteRecoveryVaultManagementClient recoveryServicesClient;
 
         /// <summary>
         /// End point Uri
@@ -157,12 +140,6 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             }
 
             cloudCredentials = AzureSession.AuthenticationFactory.GetSubscriptionCloudCredentials(azureProfile.Context);
-            this.recoveryServicesClient =
-            AzureSession.ClientFactory.CreateCustomClient<SiteRecoveryVaultManagementClient>(
-                asrVaultCreds.ResourceNamespace,
-                asrVaultCreds.ARMResourceType,
-                cloudCredentials,
-                azureProfile.Context.Environment.GetEndpointAsUri(AzureEnvironment.Endpoint.ResourceManager));
         }
 
         private static bool IgnoreCertificateErrorHandler
@@ -174,6 +151,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             return true;
         }
 
+        /*
         /// <summary>
         /// Validates current in-memory Vault Settings.
         /// </summary>
@@ -223,7 +201,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
 
             return true;
         }
-
+        */
         public static string GetResourceGroup(string resourceId)
         {
             const string resourceGroup = "resourceGroups";
@@ -288,6 +266,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             return new JavaScriptSerializer().Serialize(cikTokenDetails);
         }
 
+        /*
         /// <summary>
         /// Gets request headers.
         /// </summary>
@@ -305,21 +284,25 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 AgentAuthenticationHeader = shouldSignRequest ? this.GenerateAgentAuthenticationHeader(this.ClientRequestId) : ""
             };
         }
+        */
 
         /// <summary>
         /// Gets Site Recovery client.
         /// </summary>
         /// <returns>Site Recovery Management client</returns>
-        private SiteRecoveryManagementClient GetSiteRecoveryClient()
+        private SiteRecoveryManagementClient GetSiteRecoveryClient(Common.Authentication.Models.AzureContext context)
         {
+            var creds = AzureSession.AuthenticationFactory.GetServiceClientCredentials(context, AzureEnvironment.Endpoint.ResourceManager);
+
             SiteRecoveryManagementClient siteRecoveryClient =
-                AzureSession.ClientFactory.CreateCustomClient<SiteRecoveryManagementClient>(
-                asrVaultCreds.ResourceName,
-                asrVaultCreds.ResourceGroupName,
-                asrVaultCreds.ResourceNamespace,
-                asrVaultCreds.ARMResourceType,
-                cloudCredentials,
-                endPointUri);
+                AzureSession.ClientFactory.CreateArmClient<SiteRecoveryManagementClient>(context, AzureEnvironment.Endpoint.ResourceManager);
+
+            siteRecoveryClient.ResourceGroupName = asrVaultCreds.ResourceGroupName;
+            siteRecoveryClient.ResourceNamespace = asrVaultCreds.ResourceNamespace;
+            siteRecoveryClient.ResourceName = asrVaultCreds.ResourceName;
+            siteRecoveryClient.ResourceType = asrVaultCreds.ARMResourceType;
+            siteRecoveryClient.SubscriptionId = cloudCredentials.SubscriptionId;
+            siteRecoveryClient.BaseUri = endPointUri;
 
             if (null == siteRecoveryClient)
             {

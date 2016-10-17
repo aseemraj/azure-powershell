@@ -74,15 +74,15 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// </summary>
         private void GetByFriendlyName()
         {
-            FabricListResponse fabricListResponse =
-                RecoveryServicesClient.GetAzureSiteRecoveryFabric();
+            FabricCollection fabricListResponse =
+                RecoveryServicesClient.GetAzureSiteRecoveryFabric(DefaultProfile.Context);
 
             bool found = false;
-            foreach (Fabric fabric in fabricListResponse.Fabrics)
+            foreach (Fabric fabric in fabricListResponse.Value)
             {
                 if (0 == string.Compare(this.FriendlyName, fabric.Properties.FriendlyName, StringComparison.OrdinalIgnoreCase))
                 {
-                    var fabricByName = RecoveryServicesClient.GetAzureSiteRecoveryFabric(fabric.Name).Fabric;
+                    var fabricByName = RecoveryServicesClient.GetAzureSiteRecoveryFabric(DefaultProfile.Context, fabric.Name);
                     this.WriteFabric(fabricByName);
 
                     found = true;
@@ -107,11 +107,11 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             try
             {
                 var fabricResponse =
-                    RecoveryServicesClient.GetAzureSiteRecoveryFabric(this.Name);
+                    RecoveryServicesClient.GetAzureSiteRecoveryFabric(DefaultProfile.Context, this.Name);
 
-                if (fabricResponse.Fabric != null)
+                if (fabricResponse != null)
                 {
-                    this.WriteFabric(fabricResponse.Fabric);
+                    this.WriteFabric(fabricResponse);
                 }
             }
             catch (CloudException ex)
@@ -136,10 +136,10 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// </summary>
         private void GetAll()
         {
-            FabricListResponse fabricListResponse =
-                RecoveryServicesClient.GetAzureSiteRecoveryFabric();
+            FabricCollection fabricListResponse =
+                RecoveryServicesClient.GetAzureSiteRecoveryFabric(DefaultProfile.Context);
 
-            foreach (Fabric fabric in fabricListResponse.Fabrics)
+            foreach (Fabric fabric in fabricListResponse.Value)
             {
                 this.WriteFabric(fabric);
             }

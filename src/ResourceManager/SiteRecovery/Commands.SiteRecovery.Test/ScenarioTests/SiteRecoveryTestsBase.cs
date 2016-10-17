@@ -14,7 +14,7 @@
 
 using Microsoft.Azure.Commands.Common.Authentication;
 using Microsoft.Azure.Management.SiteRecovery;
-using Microsoft.Azure.Management.SiteRecoveryVault;
+//using Microsoft.Azure.Management.SiteRecoveryVault;
 using Microsoft.Azure.Portal.RecoveryServices.Models.Common;
 using Microsoft.Azure.Test;
 using Microsoft.Azure.Test.Authentication;
@@ -40,7 +40,6 @@ namespace Microsoft.Azure.Commands.SiteRecovery.Test.ScenarioTests
         private ASRVaultCreds asrVaultCreds = null;
 
         public SiteRecoveryManagementClient SiteRecoveryMgmtClient { get; private set; }
-        public SiteRecoveryVaultManagementClient RecoveryServicesMgmtClient { get; private set; }
 
         protected SiteRecoveryTestsBase()
         {
@@ -84,10 +83,8 @@ namespace Microsoft.Azure.Commands.SiteRecovery.Test.ScenarioTests
 
         protected void SetupManagementClients(String scenario)
         {
-            RecoveryServicesMgmtClient = GetSiteRecoveryVaultManagementClient(scenario);
-            SiteRecoveryMgmtClient = GetSiteRecoveryManagementClient(scenario);
 
-            helper.SetupManagementClients(RecoveryServicesMgmtClient, SiteRecoveryMgmtClient);
+            helper.SetupManagementClients(SiteRecoveryMgmtClient);
         }
 
         protected void RunPowerShellTest(String scenario, params string[] scripts)
@@ -115,15 +112,6 @@ namespace Microsoft.Azure.Commands.SiteRecovery.Test.ScenarioTests
             }
         }
 
-        private SiteRecoveryVaultManagementClient GetSiteRecoveryVaultManagementClient(String scenario)
-        {
-            return GetServiceClient<SiteRecoveryVaultManagementClient>(scenario);
-        }
-
-        private SiteRecoveryManagementClient GetSiteRecoveryManagementClient(String scenario)
-        {
-            return GetServiceClient<SiteRecoveryManagementClient>(scenario);
-        }
 
         public T GetServiceClient<T>(String scenario) where T : class
         {
@@ -156,136 +144,8 @@ namespace Microsoft.Azure.Commands.SiteRecovery.Test.ScenarioTests
                     break;
 
             };
+            return null;
 
-            if (typeof(T) == typeof(SiteRecoveryVaultManagementClient))
-            {
-                SiteRecoveryVaultManagementClient client;
-
-                if (testEnvironment.UsesCustomUri())
-                {
-                    client = new SiteRecoveryVaultManagementClient(
-                        resourceNamespace,
-                        resourceType,
-                        credentials,
-                        testEnvironment.BaseUri);
-                }
-                else
-                {
-                    client = new SiteRecoveryVaultManagementClient(
-                        resourceNamespace,
-                        resourceType,
-                        credentials);
-                }
-                return GetRSMServiceClient<T>(factory, client);
-            }
-            else
-            {
-                SiteRecoveryManagementClient client;
-
-                if (testEnvironment.UsesCustomUri())
-                {
-                    client = new SiteRecoveryManagementClient(
-                        resourceName,
-                        resourceGroupName,
-                        resourceNamespace,
-                        resourceType,
-                        credentials,
-                        testEnvironment.BaseUri);
-                }
-
-                else
-                {
-                    client = new SiteRecoveryManagementClient(
-                        resourceName,
-                        resourceGroupName,
-                        resourceNamespace,
-                        resourceType,
-                        credentials);
-                }
-
-                return GetSRMServiceClient<T>(factory, client);
-            }
-
-        }
-
-        public static T GetRSMServiceClient<T>(TestEnvironmentFactory factory, SiteRecoveryVaultManagementClient client) where T : class
-        {
-            TestEnvironment testEnvironment = factory.GetTestEnvironment();
-
-            HttpMockServer instance;
-            try
-            {
-                instance = HttpMockServer.CreateInstance();
-            }
-            catch (ApplicationException)
-            {
-                HttpMockServer.Initialize("TestEnvironment", "InitialCreation");
-                instance = HttpMockServer.CreateInstance();
-            }
-            T obj2 = typeof(T).GetMethod("WithHandler", new Type[1]
-            {
-                typeof (DelegatingHandler)
-            }).Invoke((object)client, new object[1]
-            {
-                (object) instance
-            }) as T;
-
-            if (HttpMockServer.Mode == HttpRecorderMode.Record)
-            {
-                HttpMockServer.Variables[TestEnvironment.SubscriptionIdKey] = testEnvironment.SubscriptionId;
-            }
-
-            if (HttpMockServer.Mode == HttpRecorderMode.Playback)
-            {
-                PropertyInfo property1 = typeof(T).GetProperty("LongRunningOperationInitialTimeout", typeof(int));
-                PropertyInfo property2 = typeof(T).GetProperty("LongRunningOperationRetryTimeout", typeof(int));
-                if (property1 != (PropertyInfo)null && property2 != (PropertyInfo)null)
-                {
-                    property1.SetValue((object)obj2, (object)0);
-                    property2.SetValue((object)obj2, (object)0);
-                }
-            }
-            return obj2;
-        }
-
-        public static T GetSRMServiceClient<T>(TestEnvironmentFactory factory, SiteRecoveryManagementClient client) where T : class
-        {
-            TestEnvironment testEnvironment = factory.GetTestEnvironment();
-
-            HttpMockServer instance;
-            try
-            {
-                instance = HttpMockServer.CreateInstance();
-            }
-            catch (ApplicationException)
-            {
-                HttpMockServer.Initialize("TestEnvironment", "InitialCreation");
-                instance = HttpMockServer.CreateInstance();
-            }
-            T obj2 = typeof(T).GetMethod("WithHandler", new Type[1]
-            {
-                typeof (DelegatingHandler)
-            }).Invoke((object)client, new object[1]
-            {
-                (object) instance
-            }) as T;
-
-            if (HttpMockServer.Mode == HttpRecorderMode.Record)
-            {
-                HttpMockServer.Variables[TestEnvironment.SubscriptionIdKey] = testEnvironment.SubscriptionId;
-            }
-
-            if (HttpMockServer.Mode == HttpRecorderMode.Playback)
-            {
-                PropertyInfo property1 = typeof(T).GetProperty("LongRunningOperationInitialTimeout", typeof(int));
-                PropertyInfo property2 = typeof(T).GetProperty("LongRunningOperationRetryTimeout", typeof(int));
-                if (property1 != (PropertyInfo)null && property2 != (PropertyInfo)null)
-                {
-                    property1.SetValue((object)obj2, (object)0);
-                    property2.SetValue((object)obj2, (object)0);
-                }
-            }
-            return obj2;
         }
 
         private static bool IgnoreCertificateErrorHandler

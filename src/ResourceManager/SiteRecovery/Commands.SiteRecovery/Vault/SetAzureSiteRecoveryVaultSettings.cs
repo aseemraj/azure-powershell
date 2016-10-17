@@ -29,13 +29,6 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         #region Parameters
 
         /// <summary>
-        /// Gets or sets ASR vault Object.
-        /// </summary>
-        [Parameter(ParameterSetName = ASRParameterSets.ASRVault, Mandatory = true, ValueFromPipeline = true)]
-        [ValidateNotNullOrEmpty]
-        public ASRVault ASRVault { get; set; }
-
-        /// <summary>
         /// Gets or sets ARS vault Object.
         /// </summary>
         [Parameter(ParameterSetName = ASRParameterSets.ARSVault, Mandatory = true, ValueFromPipeline = true)]
@@ -53,9 +46,6 @@ namespace Microsoft.Azure.Commands.SiteRecovery
 
             switch (this.ParameterSetName)
             {
-                case ASRParameterSets.ASRVault:
-                    this.SetASRVaultContext(this.ASRVault);
-                    break;
                 case ASRParameterSets.ARSVault:
                     this.SetARSVaultContext(this.ARSVault);
                     break;
@@ -64,21 +54,6 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             }
         }
 
-        /// <summary>
-        /// Set Azure Site Recovery Vault context.
-        /// </summary>
-        private void SetASRVaultContext(ASRVault asrVault)
-        {
-            // Change the vault context
-            RecoveryServicesClient.ChangeVaultContext(asrVault);
-
-            // Validate the Vault
-            RecoveryServicesClient.ValidateVaultSettings(
-                asrVault.Name,
-                asrVault.ResourceGroupName);
-
-            this.WriteObject(new ASRVaultSettings(PSRecoveryServicesClient.asrVaultCreds));
-        }
 
         /// <summary>
         /// Set Azure Recovery Services Vault context.

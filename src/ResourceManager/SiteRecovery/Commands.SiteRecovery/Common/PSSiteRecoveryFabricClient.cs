@@ -12,8 +12,10 @@
 // limitations under the License.
 // ----------------------------------------------------------------------------------
 
+using AutoMapper;
 using Microsoft.Azure.Management.SiteRecovery;
 using Microsoft.Azure.Management.SiteRecovery.Models;
+using Microsoft.Azure.Portal.RecoveryServices.Models.Common;
 
 namespace Microsoft.Azure.Commands.SiteRecovery
 {
@@ -27,9 +29,9 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// </summary>
         /// <param name="shouldSignRequest">Boolean indicating if the request should be signed ACIK</param>
         /// <returns>Server list response</returns>
-        public FabricListResponse GetAzureSiteRecoveryFabric(bool shouldSignRequest = true)
+        public FabricCollection GetAzureSiteRecoveryFabric(Common.Authentication.Models.AzureContext context, bool shouldSignRequest = true)
         {
-            return this.GetSiteRecoveryClient().Fabrics.List(this.GetRequestHeaders(shouldSignRequest));
+            return this.GetSiteRecoveryClient(context).FabricsController.EnumerateFabrics();
         }
 
         /// <summary>
@@ -37,37 +39,26 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// </summary>
         /// <param name="fabricName">Server ID</param>
         /// <returns>Server response</returns>
-        public FabricResponse GetAzureSiteRecoveryFabric(string fabricName)
+        public Fabric GetAzureSiteRecoveryFabric(Common.Authentication.Models.AzureContext context, string fabricName)
         {
-            return this.GetSiteRecoveryClient().Fabrics.Get(fabricName, this.GetRequestHeaders());
+            return this.GetSiteRecoveryClient(context).FabricsController.GetFabric(fabricName);
         }
+
 
         /// <summary>
         /// Creates Azure Site Recovery Fabric.
         /// </summary>
         /// <param name="createAndAssociatePolicyInput">Policy Input</param>
         /// <returns>Long operation response</returns>
-        public LongRunningOperationResponse CreateAzureSiteRecoveryFabric(string fabricName, string fabricType = null)
+        public PSSiteRecoveryLongRunningOperation CreateAzureSiteRecoveryFabric(Common.Authentication.Models.AzureContext context, string fabricName, FabricCreationInput input)
         {
-            if (string.IsNullOrEmpty(fabricType))
-            {
-                fabricType = FabricProviders.HyperVSite;
-            }
-
-            FabricCreationInputProperties fabricCreationInputProperties = new FabricCreationInputProperties()
-            {
-                CustomDetails = new FabricSpecificCreationSettings()
-            };
-
-            FabricCreationInput fabricCreationInput = new FabricCreationInput()
-            {
-                Properties = fabricCreationInputProperties
-            };
-
-            return this.GetSiteRecoveryClient().Fabrics.BeginCreating(fabricName, fabricCreationInput,
-                this.GetRequestHeaders(false));
+            var op =  this.GetSiteRecoveryClient(context).FabricsController.CreateFabricWithHttpMessagesAsync(fabricName, input).GetAwaiter().GetResult();
+            var result = Mapper.Map<PSSiteRecoveryLongRunningOperation>(op);
+            return result;
         }
 
+        /*
+         
         /// <summary>
         /// Deletes Azure Site Recovery Fabric.
         /// </summary>
@@ -89,24 +80,6 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             return this.GetSiteRecoveryClient().Fabrics.BeginPurging(fabricName,
                 this.GetRequestHeaders());
         }
-    }
-
-    /// <summary>
-    /// Fabric extensions.
-    /// </summary>
-    public static class FabricExtensions
-    {
-        /// <summary>
-        /// Gets ARM Id of fabric from provider's ARM Id.
-        /// </summary>
-        /// <param name="provider">Provider ARM Id.</param>
-        /// <returns>ARM Id of fabric.</returns>
-        public static string GetFabricId(this ASRServer provider)
-        {
-            return provider.ID.GetVaultArmId() + "/" +
-                string.Format(ARMResourceIdPaths.FabricResourceIdPath,
-                provider.ID.UnFormatArmId(
-                    ARMResourceIdPaths.RecoveryServicesProviderResourceIdPath));
-        }
+        */
     }
 }

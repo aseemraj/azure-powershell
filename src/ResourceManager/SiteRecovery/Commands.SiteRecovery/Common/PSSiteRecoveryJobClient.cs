@@ -22,6 +22,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
     /// </summary>
     public partial class PSRecoveryServicesClient
     {
+        /*
         /// <summary>
         /// Gets Azure Site Recovery Job details.
         /// </summary>
@@ -31,16 +32,18 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         {
             return this.GetSiteRecoveryClient().Jobs.Get(jobName, this.GetRequestHeaders(false));
         }
+         * */
 
         /// <summary>
         /// Get Azure Site Recovery Job.
         /// </summary>
         /// <returns>Job list response</returns>
-        public JobListResponse GetAzureSiteRecoveryJob(JobQueryParameter jqp)
+        public JobCollection GetAzureSiteRecoveryJob(Common.Authentication.Models.AzureContext context)
         {
-            return this.GetSiteRecoveryClient().Jobs.List(jqp, this.GetRequestHeaders(false));
+            return this.GetSiteRecoveryClient(context).JobsController.EnumerateJobs();
         }
 
+        /*
         /// <summary>
         /// Resumes Azure Site Recovery Job.
         /// </summary>
@@ -59,7 +62,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// </summary>
         /// <param name="jobName">Job Name</param>
         /// <returns>Long running operation response</returns>
-        public LongRunningOperationResponse RestartAzureSiteRecoveryJob(
+        public PSSiteRecoveryLongRunningOperation RestartAzureSiteRecoveryJob(
             string jobName)
         {
             return this.GetSiteRecoveryClient().Jobs.BeginRestarting(jobName, this.GetRequestHeaders());
@@ -70,10 +73,11 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// </summary>
         /// <param name="jobName">Job Name</param>
         /// <returns>Long running operation response</returns>
-        public LongRunningOperationResponse CancelAzureSiteRecoveryJob(
+        public PSSiteRecoveryLongRunningOperation CancelAzureSiteRecoveryJob(
             string jobName)
         {
             return this.GetSiteRecoveryClient().Jobs.BeginCancelling(jobName, this.GetRequestHeaders());
         }
+        */
     }
 }
