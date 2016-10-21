@@ -15,7 +15,7 @@
 using Hyak.Common;
 using Microsoft.Azure.Commands.ResourceManager.Common;
 using Microsoft.Azure.Management.SiteRecovery.Models;
-using Microsoft.Azure.Management.SiteRecoveryVault.Models;
+//using Microsoft.Azure.Management.SiteRecoveryVault.Models;
 using Newtonsoft.Json;
 using System;
 using System.Runtime.Serialization;
@@ -61,6 +61,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// </summary>
         public virtual void ExecuteSiteRecoveryCmdlet()
         {
+            SiteRecoveryAutoMapperProfile.Initialize();
             // Do Nothing
         }
 
@@ -172,6 +173,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             }
         }
 
+        /*
         /// <summary>
         /// Waits for the job to complete.
         /// </summary>
@@ -179,7 +181,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Final job response</returns>
         public JobResponse WaitForJobCompletion(string jobId)
         {
-            JobResponse jobResponse = null;
+            var jobResponse = null;
             do
             {
                 Thread.Sleep(PSRecoveryServicesClient.TimeToSleepBeforeFetchingJobDetailsAgain);
@@ -197,6 +199,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                         this.StopProcessingFlag));
             return jobResponse;
         }
+        */
 
         /// <summary>
         /// Handles interrupts.
@@ -231,6 +234,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             }
         }
 
+        /*
         /// <summary>
         /// Gets the current vault location.
         /// </summary>
@@ -253,5 +257,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
 
             return location;
         }
+        */
+
     }
 }

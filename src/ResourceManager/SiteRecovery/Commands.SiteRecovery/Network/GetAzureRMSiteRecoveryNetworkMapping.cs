@@ -27,15 +27,12 @@ namespace Microsoft.Azure.Commands.SiteRecovery
     public class GetAzureRmSiteRecoveryNetworkMapping : SiteRecoveryCmdletBase
     {
         /// <summary>
-        /// holds Network Mappings
-        /// </summary>
-        private NetworkMappingsListResponse networkMappingsListResponse;
-
-        /// <summary>
         /// 
         /// </summary>
         string primaryServerName = string.Empty;
         string recoveryServerName = string.Empty;
+
+        List<NetworkMapping> networkMappingsListResponse  = null;
 
         #region Parameters
         /// <summary>
@@ -105,7 +102,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     this.FilterE2AMappings();
                     break;
                 case ASRParameterSets.Default:
-                    WriteNetworkMappings(networkMappingsListResponse.NetworkMappingsList);
+                    WriteNetworkMappings(networkMappingsListResponse);
                     break;
             }
         }
@@ -120,7 +117,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             recoveryServerName =
                 Utilities.GetValueFromArmId(this.RecoveryServer.ID, ARMResourceTypeConstants.ReplicationFabrics);
 
-            foreach (NetworkMapping networkMapping in networkMappingsListResponse.NetworkMappingsList)
+            foreach (NetworkMapping networkMapping in networkMappingsListResponse)
             {
                 string primaryFabricName =
                     Utilities.GetValueFromArmId(networkMapping.Id, ARMResourceTypeConstants.ReplicationFabrics);
@@ -148,7 +145,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             primaryServerName =
                 Utilities.GetValueFromArmId(this.PrimaryServer.ID, ARMResourceTypeConstants.ReplicationFabrics);
 
-            foreach (NetworkMapping networkMapping in networkMappingsListResponse.NetworkMappingsList)
+            foreach (NetworkMapping networkMapping in networkMappingsListResponse)
             {
                 string primaryFabricName =
                     Utilities.GetValueFromArmId(networkMapping.Id, ARMResourceTypeConstants.ReplicationFabrics);
@@ -166,7 +163,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// </summary>
         private void FilterE2EMappings()
         {              
-            foreach (NetworkMapping networkMapping in networkMappingsListResponse.NetworkMappingsList)
+            foreach (NetworkMapping networkMapping in networkMappingsListResponse)
             {
                 string primaryFabricName = Utilities.GetValueFromArmId(networkMapping.Id, ARMResourceTypeConstants.ReplicationFabrics);
 
@@ -189,7 +186,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// </summary>
         private void FilterE2AMappings()
         {
-            foreach (NetworkMapping networkMapping in networkMappingsListResponse.NetworkMappingsList)
+            foreach (NetworkMapping networkMapping in networkMappingsListResponse)
             {
                 string primaryFabricName = Utilities.GetValueFromArmId(networkMapping.Id, ARMResourceTypeConstants.ReplicationFabrics);
 

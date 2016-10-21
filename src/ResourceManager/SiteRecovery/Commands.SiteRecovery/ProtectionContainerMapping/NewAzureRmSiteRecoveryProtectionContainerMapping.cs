@@ -142,17 +142,17 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 Properties = inputProperties
             };
 
-            LongRunningOperationResponse response = RecoveryServicesClient.ConfigureProtection(
+            PSSiteRecoveryLongRunningOperation response = RecoveryServicesClient.ConfigureProtection(
                 Utilities.GetValueFromArmId(this.PrimaryProtectionContainer.ID, ARMResourceTypeConstants.ReplicationFabrics),
                 this.PrimaryProtectionContainer.Name, 
                 this.Name, 
                 input);
 
-            JobResponse jobResponse =
+            var jobResponse =
                 RecoveryServicesClient.
                 GetAzureSiteRecoveryJobDetails(PSRecoveryServicesClient.GetJobIdFromReponseLocation(response.Location));
 
-            this.WriteObject(new ASRJob(jobResponse.Job));
+            this.WriteObject(new ASRJob(jobResponse));
         }
 
     }

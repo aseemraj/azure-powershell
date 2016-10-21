@@ -23,6 +23,27 @@ using System.Text;
 
 namespace Microsoft.Azure.Commands.SiteRecovery
 {
+    public class PSSiteRecoveryLongRunningOperation
+    {
+        public string ClientRequestId { get; set; }
+
+        public string CorrelationRequestId { get; set; }
+
+        public string Date { get; set; }
+
+        public string ContentType { get; set; }
+
+        public string Location { get; set; }
+
+        public int? RetryAfter { get; set; }
+
+        public string AsyncOperation { get; set; }
+
+        public OperationStatus Status { get; set; }
+
+        public string Culture { get; set; }
+    }
+
     /// <summary>
     /// Hash functions which can be used to calculate CIK HMAC.
     /// </summary>
@@ -353,7 +374,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// Gets or sets Data contract version.
         /// </summary>
         [DataMember(Name = "Version")]
-        public Version Version { get; set; }
+        public System.Version Version { get; set; }
 
         /// <summary>
         /// Gets or sets property bag. This property bag is introduced to support addition of any 
@@ -633,6 +654,7 @@ namespace Microsoft.Azure.Portal.RecoveryServices.Models.Common
     [DataContract]
     public class AcsNamespace
     {
+        /*
         /// <summary>
         /// Initializes a new instance of the <see cref="AcsNamespace"/> class.
         /// </summary>
@@ -643,6 +665,7 @@ namespace Microsoft.Azure.Portal.RecoveryServices.Models.Common
             this.Namespace = acsDetails.Properties.GlobalAcsNamespace;
             this.ResourceProviderRealm = acsDetails.Properties.GlobalAcsRPRealm;
         }
+        */
 
         /// <summary>
         /// Gets or sets Host name
@@ -796,6 +819,7 @@ namespace Microsoft.Azure.Portal.HybridServicesCore
 
         #region Public methods
 
+        /*
         /// <summary>
         /// Returns the Xml representation of this object.
         /// </summary>
@@ -815,6 +839,7 @@ namespace Microsoft.Azure.Portal.HybridServicesCore
 
             return extendedInfoArgs;
         }
+        */
 
         /// <summary>
         /// Method to generate security information

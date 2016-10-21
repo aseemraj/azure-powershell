@@ -31,12 +31,12 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <summary>
         /// Long Running Operation Response
         /// </summary>
-        private LongRunningOperationResponse response = null;
+        private PSSiteRecoveryLongRunningOperation response = null;
 
         /// <summary>
         /// Job Response
         /// </summary>
-        private JobResponse jobResponse = null;
+        private Management.SiteRecovery.Models.Job jobResponse = null;
 
         /// <summary>
         /// Holds either Name (if object is passed) or ID (if IDs are passed) of the PE.
@@ -82,7 +82,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     DisableProtectionInput input = new DisableProtectionInput();
                     input.Properties = new DisableProtectionInputProperties()
                     {
-                        ProviderSettings = new DisableProtectionProviderSpecificInput()
+                        ReplicationProviderInput = new DisableProtectionProviderSpecificInput()
                     };
                     this.response =
                         RecoveryServicesClient.DisableProtection(
@@ -104,8 +104,9 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     RecoveryServicesClient
                     .GetAzureSiteRecoveryJobDetails(PSRecoveryServicesClient.GetJobIdFromReponseLocation(response.Location));
 
-                WriteObject(new ASRJob(jobResponse.Job));
+                WriteObject(new ASRJob(jobResponse));
 
+                /*
                 if (this.WaitForCompletion.IsPresent)
                 {
                     this.WaitForJobCompletion(this.jobResponse.Job.Name);
@@ -114,8 +115,9 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     RecoveryServicesClient
                     .GetAzureSiteRecoveryJobDetails(PSRecoveryServicesClient.GetJobIdFromReponseLocation(response.Location));
 
-                    WriteObject(new ASRJob(jobResponse.Job));
+                    WriteObject(new ASRJob(jobResponse));
                 }
+                */
             }
         }
 

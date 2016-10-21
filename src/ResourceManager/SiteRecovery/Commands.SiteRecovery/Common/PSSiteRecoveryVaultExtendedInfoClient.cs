@@ -15,7 +15,7 @@
 using Hyak.Common;
 using Microsoft.Azure.Commands.SiteRecovery.Properties;
 using Microsoft.Azure.Management.SiteRecovery.Models;
-using Microsoft.Azure.Management.SiteRecoveryVault;
+//using Microsoft.Azure.Management.SiteRecoveryVault;
 using Microsoft.Azure.Portal.HybridServicesCore;
 using Microsoft.Azure.Portal.RecoveryServices.Models.Common;
 using System;
@@ -33,6 +33,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
     /// </summary>
     public partial class PSRecoveryServicesClient
     {
+        /*
         /// <summary>
         /// Gets Vault Extended Information
         /// </summary>
@@ -282,5 +283,6 @@ namespace Microsoft.Azure.Commands.SiteRecovery
 
             return vaultCreds;
         }
+        */
     }
 }

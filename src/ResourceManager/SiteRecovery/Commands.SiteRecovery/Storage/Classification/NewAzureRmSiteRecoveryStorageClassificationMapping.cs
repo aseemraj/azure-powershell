@@ -55,7 +55,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         public override void ExecuteSiteRecoveryCmdlet()
         {
             base.ExecuteSiteRecoveryCmdlet();
-
+            /*
             string mappingName = string.IsNullOrEmpty(this.Name) ?
                 string.Format("StrgMap_{0}_{1}_{2}", PrimaryStorageClassification.Name, RecoveryStorageClassification.Name, Guid.NewGuid()) :
                 this.Name;
@@ -70,17 +70,18 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 Properties = props
             };
 
-            LongRunningOperationResponse operationResponse =
+            PSSiteRecoveryLongRunningOperation operationResponse =
                 RecoveryServicesClient.MapStorageClassification(
                 PrimaryStorageClassification,
                 input,
                 mappingName);
 
-            JobResponse jobResponse =
+            var jobResponse =
                 RecoveryServicesClient.GetAzureSiteRecoveryJobDetails(
                 PSRecoveryServicesClient.GetJobIdFromReponseLocation(operationResponse.Location));
 
-            base.WriteObject(new ASRJob(jobResponse.Job));
+            base.WriteObject(new ASRJob(jobResponse));
+            */
         }
     }
 }

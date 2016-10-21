@@ -16,8 +16,8 @@ using Microsoft.Azure.Commands.Common.Authentication;
 using Microsoft.Azure.Commands.Common.Authentication.Models;
 using Microsoft.Azure.Management.SiteRecovery;
 using Microsoft.Azure.Management.SiteRecovery.Models;
-using Microsoft.Azure.Management.SiteRecoveryVault;
-using Microsoft.Azure.Management.SiteRecoveryVault.Models;
+//using Microsoft.Azure.Management.SiteRecoveryVault;
+//using Microsoft.Azure.Management.SiteRecoveryVault.Models;
 using Microsoft.Azure.Portal.RecoveryServices.Models.Common;
 using System;
 using System.Collections.Generic;
@@ -44,6 +44,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// </summary>
         public string ClientRequestId { get; set; }
 
+        /*
         /// <summary>
         /// Gets the value of recovery services management client.
         /// </summary>
@@ -54,6 +55,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 return this.recoveryServicesClient;
             }
         }
+        */
 
         /// <summary>
         /// Amount of time to sleep before fetching job details again.
@@ -74,7 +76,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <summary>
         /// Recovery Services client.
         /// </summary>
-        private SiteRecoveryVaultManagementClient recoveryServicesClient;
+        //private SiteRecoveryVaultManagementClient recoveryServicesClient;
 
         /// <summary>
         /// End point Uri
@@ -86,6 +88,8 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// </summary>
         private static SubscriptionCloudCredentials cloudCredentials;
 
+        private static AzureContext AzureContext;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PSRecoveryServicesClient" /> class with 
         /// required current subscription.
@@ -93,6 +97,8 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <param name="azureSubscription">Azure Subscription</param>
         public PSRecoveryServicesClient(IAzureProfile azureProfile)
         {
+            AzureContext = azureProfile.Context;
+
             System.Configuration.Configuration siteRecoveryConfig = ConfigurationManager.OpenExeConfiguration(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
             System.Configuration.AppSettingsSection appSettings = (System.Configuration.AppSettingsSection)siteRecoveryConfig.GetSection("appSettings");
@@ -157,12 +163,14 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             }
 
             cloudCredentials = AzureSession.AuthenticationFactory.GetSubscriptionCloudCredentials(azureProfile.Context);
+            /*
             this.recoveryServicesClient =
             AzureSession.ClientFactory.CreateCustomClient<SiteRecoveryVaultManagementClient>(
                 asrVaultCreds.ResourceNamespace,
                 asrVaultCreds.ARMResourceType,
                 cloudCredentials,
                 azureProfile.Context.Environment.GetEndpointAsUri(AzureEnvironment.Endpoint.ResourceManager));
+                */
         }
 
         private static bool IgnoreCertificateErrorHandler
@@ -174,6 +182,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             return true;
         }
 
+        /*
         /// <summary>
         /// Validates current in-memory Vault Settings.
         /// </summary>
@@ -223,6 +232,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
 
             return true;
         }
+        */
 
         public static string GetResourceGroup(string resourceId)
         {
@@ -271,7 +281,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             cikTokenDetails.NotBeforeTimestamp = TimeZoneInfo.ConvertTimeToUtc(currentDateTime);
             cikTokenDetails.NotAfterTimestamp = cikTokenDetails.NotBeforeTimestamp.AddDays(7);
             cikTokenDetails.ClientRequestId = clientRequestId;
-            cikTokenDetails.Version = new Version(1, 2);
+            cikTokenDetails.Version = new System.Version(1, 2);
             cikTokenDetails.PropertyBag = new Dictionary<string, object>();
 
             string shaInput = new JavaScriptSerializer().Serialize(cikTokenDetails);
@@ -288,6 +298,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             return new JavaScriptSerializer().Serialize(cikTokenDetails);
         }
 
+        /*
         /// <summary>
         /// Gets request headers.
         /// </summary>
@@ -305,6 +316,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 AgentAuthenticationHeader = shouldSignRequest ? this.GenerateAgentAuthenticationHeader(this.ClientRequestId) : ""
             };
         }
+        */
 
         /// <summary>
         /// Gets Site Recovery client.
@@ -312,14 +324,17 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Site Recovery Management client</returns>
         private SiteRecoveryManagementClient GetSiteRecoveryClient()
         {
+            var creds = AzureSession.AuthenticationFactory.GetServiceClientCredentials(AzureContext);
+
             SiteRecoveryManagementClient siteRecoveryClient =
-                AzureSession.ClientFactory.CreateCustomClient<SiteRecoveryManagementClient>(
-                asrVaultCreds.ResourceName,
-                asrVaultCreds.ResourceGroupName,
-                asrVaultCreds.ResourceNamespace,
-                asrVaultCreds.ARMResourceType,
-                cloudCredentials,
-                endPointUri);
+                AzureSession.ClientFactory.CreateArmClient<SiteRecoveryManagementClient>(AzureContext, AzureEnvironment.Endpoint.ResourceManager);
+
+            siteRecoveryClient.ResourceGroupName = asrVaultCreds.ResourceGroupName;
+            siteRecoveryClient.ResourceNamespace = asrVaultCreds.ResourceNamespace;
+            siteRecoveryClient.ResourceName = asrVaultCreds.ResourceName;
+            siteRecoveryClient.ResourceType = asrVaultCreds.ARMResourceType;
+            siteRecoveryClient.SubscriptionId = cloudCredentials.SubscriptionId;
+            siteRecoveryClient.BaseUri = endPointUri;
 
             if (null == siteRecoveryClient)
             {

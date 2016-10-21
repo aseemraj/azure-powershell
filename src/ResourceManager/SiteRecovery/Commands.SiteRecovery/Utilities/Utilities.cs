@@ -23,6 +23,9 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using System.Linq.Expressions;
+using System.Reflection;
+using System.Collections;
+using Microsoft.Rest.Azure;
 
 namespace Microsoft.Azure.Commands.SiteRecovery
 {
@@ -31,6 +34,84 @@ namespace Microsoft.Azure.Commands.SiteRecovery
     /// </summary>
     public static class Utilities
     {
+        public static List<T> IpageToList<T>(IPage<T> input)
+        {
+            var result = new List<T>();
+            
+            foreach(var item in input)
+            {
+                result.Add(item);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Converts Query object to query string to pass on.
+        /// </summary>
+        /// <param name="queryObject">Query object</param>
+        /// <returns>Qeury string</returns>
+        public static string ToQueryString(this object queryObject)
+        {
+            if (queryObject == null)
+            {
+                return string.Empty;
+            }
+
+            Type objType = queryObject.GetType();
+            PropertyInfo[] properties = objType.GetProperties();
+
+            System.Text.StringBuilder queryString = new System.Text.StringBuilder();
+            List<string> propQuery = new List<string>();
+            foreach (PropertyInfo property in properties)
+            {
+                object propValue = property.GetValue(queryObject, null);
+                if (propValue != null)
+                {
+                    // IList is the only one we are handling
+                    var elems = propValue as IList;
+                    if (elems != null && elems.Count != 0)
+                    {
+                        int itemCount = 0;
+                        string[] multiPropQuery = new string[elems.Count];
+                        foreach (var item in elems)
+                        {
+                            multiPropQuery[itemCount] =
+                                new System.Text.StringBuilder()
+                                .Append(property.Name)
+                                .Append(" eq '")
+                                .Append(item.ToString())
+                                .Append("'")
+                                .ToString();
+
+                            itemCount++;
+                        }
+                        propQuery.Add("( " + string.Join(" or ", multiPropQuery) + " )");
+                    }
+                    /*Add DateTime, others if required*/
+                    else
+                    {
+                        if (propValue.ToString().Contains("Hyak.Common.LazyList"))
+                        {
+                            // Just skip the property.
+                        }
+                        else
+                        {
+                            propQuery.Add(
+                                new System.Text.StringBuilder()
+                                .Append(property.Name)
+                                .Append(" eq '")
+                                .Append(propValue.ToString())
+                                .Append("'")
+                                .ToString());
+                        }
+                    }
+                }
+            }
+            queryString.Append(string.Join(" and ", propQuery));
+            return queryString.ToString();
+        }
+
         /// <summary>
         /// Serialize the T as xml using DataContract Serializer
         /// </summary>
@@ -399,15 +480,15 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             switch (actionType)
             {
                 case RecoveryPlanActionDetailsType.AutomationRunbookActionDetails:
-                    outputType = new RecoveryPlanAutomationRunbookActionDetails();
+                    //outputType = new RecoveryPlanAutomationRunbookActionDetails(); //TODO
                     break;
 
                 case RecoveryPlanActionDetailsType.ManualActionDetails:
-                    outputType = new RecoveryPlanManualActionDetails();
+                    //outputType = new RecoveryPlanManualActionDetails();
                     break;
 
                 case RecoveryPlanActionDetailsType.ScriptActionDetails:
-                    outputType = new RecoveryPlanScriptActionDetails();
+                    //outputType = new RecoveryPlanScriptActionDetails();
                     break;
             }
 

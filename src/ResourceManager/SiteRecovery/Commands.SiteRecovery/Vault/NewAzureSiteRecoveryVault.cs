@@ -12,7 +12,7 @@
 // limitations under the License.
 // ----------------------------------------------------------------------------------
 
-using Microsoft.Azure.Management.SiteRecoveryVault.Models;
+//using Microsoft.Azure.Management.SiteRecoveryVault.Models;
 using System.Management.Automation;
 
 namespace Microsoft.Azure.Commands.SiteRecovery
@@ -54,7 +54,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         public override void ExecuteSiteRecoveryCmdlet()
         {
             base.ExecuteSiteRecoveryCmdlet();
-
+            /*
             this.WriteWarningWithTimestamp(
                 string.Format(
                 Properties.Resources.SiteRecoveryVaultTypeWillBeDeprecatedSoon));
@@ -68,6 +68,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             VaultCreateResponse response = RecoveryServicesClient.CreateVault(this.ResourceGroupName, this.Name, vaultCreateArgs);
 
             this.WriteObject(new ASRVault(response));
+            */
         }
     }
 }

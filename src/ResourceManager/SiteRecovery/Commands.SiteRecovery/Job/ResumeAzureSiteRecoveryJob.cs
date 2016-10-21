@@ -81,13 +81,13 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             resumeJobParams.Properties = new ResumeJobParamsProperties();
             resumeJobParams.Properties.Comments = this.Comments;
 
-            LongRunningOperationResponse response = RecoveryServicesClient.ResumeAzureSiteRecoveryJob(this.Name, resumeJobParams);
+            PSSiteRecoveryLongRunningOperation response = RecoveryServicesClient.ResumeAzureSiteRecoveryJob(this.Name, resumeJobParams);
 
-            JobResponse jobResponse =
+            var jobResponse =
                 RecoveryServicesClient
                 .GetAzureSiteRecoveryJobDetails(PSRecoveryServicesClient.GetJobIdFromReponseLocation(response.Location));
 
-            WriteObject(new ASRJob(jobResponse.Job));
+            WriteObject(new ASRJob(jobResponse));
         }
     }
 }

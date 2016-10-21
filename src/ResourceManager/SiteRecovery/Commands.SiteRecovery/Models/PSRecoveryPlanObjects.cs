@@ -30,7 +30,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         {
             if (recoveryPlanGroup != null)
             {
-                this.GroupType = recoveryPlanGroup.GroupType;
+                this.GroupType = recoveryPlanGroup.GroupType.ToString(); //TODO
                 this.StartGroupActions = recoveryPlanGroup.StartGroupActions;
                 this.EndGroupActions = recoveryPlanGroup.EndGroupActions;
 
@@ -52,6 +52,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             this.Name = groupName;
         }
 
+
         /// <summary>
         /// Gets or sets Recovery plan group Name.
         /// </summary>
@@ -60,6 +61,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         // Summary:
         //     Optional. Recovery plan end group actions.
         public IList<RecoveryPlanAction> EndGroupActions { get; set; }
+
         //
         // Summary:
         //     Required. Group type.
@@ -114,10 +116,10 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                         groupCount++;
                         groupName = "Group " + groupCount.ToString();
                         break;
-                    case Constants.Failover:
+                    case Constants.Failover.ToString():
                         groupName = Constants.Failover;
                         break;
-                    case Constants.Shutdown:
+                    case Constants.Shutdown.ToString():
                         groupName = Constants.Shutdown;
                         break;
                 }

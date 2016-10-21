@@ -12,8 +12,8 @@
 // limitations under the License.
 // ----------------------------------------------------------------------------------
 
-using Microsoft.Azure.Management.SiteRecoveryVault;
-using Microsoft.Azure.Management.SiteRecoveryVault.Models;
+//using Microsoft.Azure.Management.SiteRecoveryVault;
+//using Microsoft.Azure.Management.SiteRecoveryVault.Models;
 
 namespace Microsoft.Azure.Commands.SiteRecovery
 {
@@ -22,6 +22,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
     /// </summary>
     public partial class PSRecoveryServicesClient
     {
+        /*
         /// <summary>
         /// Method to list Azure Site Recovery Vaults
         /// </summary>
@@ -63,5 +64,6 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         {
             return this.GetRecoveryServicesClient.ResourceGroup.List();
         }
+        */
     }
 }

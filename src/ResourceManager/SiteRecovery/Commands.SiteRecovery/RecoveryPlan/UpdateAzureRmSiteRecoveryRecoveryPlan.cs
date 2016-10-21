@@ -91,7 +91,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             {
                 RecoveryPlanGroup recoveryPlanGroup = new RecoveryPlanGroup()
                 {
-                    GroupType = asrRecoveryPlanGroup.GroupType,
+                    GroupType = asrRecoveryPlanGroup.GroupType, //TODO
 
                     // Initialize ReplicationProtectedItems with empty List if asrRecoveryPlanGroup.ReplicationProtectedItems is null
                     // otherwise assign respective values
@@ -106,9 +106,9 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                             {
                                 VmId = ((HyperVReplicaAzureReplicationDetails)item.Properties.ProviderSpecificDetails).VmId;
                             }
-                            else if (item.Properties.ProviderSpecificDetails.GetType() == typeof(HyperVReplica2012ReplicationDetails))
+                            else if (item.Properties.ProviderSpecificDetails.GetType() == typeof(HyperVReplicaBlueReplicationDetails))
                             {
-                                VmId = ((HyperVReplica2012ReplicationDetails)item.Properties.ProviderSpecificDetails).VmId;
+                                VmId = ((HyperVReplicaBlueReplicationDetails)item.Properties.ProviderSpecificDetails).VmId;
                             }
 
                             newItem.VirtualMachineId = VmId;
@@ -154,14 +154,14 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// </summary>
         private void UpdateRecoveryPlan(string recoveryPlanName, UpdateRecoveryPlanInput updateRecoveryPlanInput)
         {
-            LongRunningOperationResponse response =
+            PSSiteRecoveryLongRunningOperation response =
             RecoveryServicesClient.UpdateAzureSiteRecoveryRecoveryPlan(recoveryPlanName, updateRecoveryPlanInput);
 
-            JobResponse jobResponse =
+            var jobResponse =
                 RecoveryServicesClient
                 .GetAzureSiteRecoveryJobDetails(PSRecoveryServicesClient.GetJobIdFromReponseLocation(response.Location));
 
-            WriteObject(new ASRJob(jobResponse.Job));
+            WriteObject(new ASRJob(jobResponse));
         }
 
     }

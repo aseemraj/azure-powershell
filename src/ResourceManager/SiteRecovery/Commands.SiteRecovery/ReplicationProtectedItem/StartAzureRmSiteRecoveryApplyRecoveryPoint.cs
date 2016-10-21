@@ -140,23 +140,23 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 {
                     PrimaryKekCertificatePfx = primaryKekCertpfx,
                     SecondaryKekCertificatePfx = secondaryKekCertpfx,
-                    VaultLocation = this.GetCurrentVaultLocation()
+                    VaultLocation = "" // TODO this.GetCurrentVaultLocation()
                 };
                 input.Properties.ProviderSpecificDetails = hyperVReplicaAzureApplyRecoveryPointInput;
             }
 
-            LongRunningOperationResponse response =
+            PSSiteRecoveryLongRunningOperation response =
                 RecoveryServicesClient.StartAzureSiteRecoveryApplyRecoveryPoint(
                 this.fabricName,
                 this.protectionContainerName,
                 this.ReplicationProtectedItem.Name,
                 input);
 
-            JobResponse jobResponse =
+            var jobResponse =
                 RecoveryServicesClient
                 .GetAzureSiteRecoveryJobDetails(PSRecoveryServicesClient.GetJobIdFromReponseLocation(response.Location));
 
-            WriteObject(new ASRJob(jobResponse.Job));
+            WriteObject(new ASRJob(jobResponse));
         }      
     }
 }

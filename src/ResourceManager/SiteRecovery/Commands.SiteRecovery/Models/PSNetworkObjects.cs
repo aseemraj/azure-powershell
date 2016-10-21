@@ -150,7 +150,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             this.PrimaryNetworkFriendlyName = networkMapping.Properties.PrimaryNetworkFriendlyName;
             this.RecoveryNetworkId = networkMapping.Properties.RecoveryNetworkId;
             this.RecoveryNetworkFriendlyName = networkMapping.Properties.RecoveryNetworkFriendlyName;
-            this.PairingStatus = networkMapping.Properties.PairingStatus;
+            this.PairingStatus = networkMapping.Properties.State;
         }
 
         #region Properties

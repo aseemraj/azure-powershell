@@ -53,14 +53,14 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     this.MyInvocation.MyCommand.Name,
                     "New-AzureRmSiteRecoveryFabric"));
 
-            LongRunningOperationResponse response =
-             RecoveryServicesClient.CreateAzureSiteRecoveryFabric(this.Name, FabricProviders.HyperVSite);
+            PSSiteRecoveryLongRunningOperation response =
+             RecoveryServicesClient.CreateAzureSiteRecoveryFabric(this.Name, null);
 
-            JobResponse jobResponse =
+            var jobResponse =
                 RecoveryServicesClient
                 .GetAzureSiteRecoveryJobDetails(PSRecoveryServicesClient.GetJobIdFromReponseLocation(response.Location));
 
-            WriteObject(new ASRJob(jobResponse.Job));
+            WriteObject(new ASRJob(jobResponse));
         }
     }
 }

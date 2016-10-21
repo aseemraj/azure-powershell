@@ -28,25 +28,11 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// </summary>
         /// <param name="protectionContainerName">Protection Container Name</param>
         /// <returns>Protection entity list response</returns>
-        public ProtectableItemListResponse GetAzureSiteRecoveryProtectableItem(string fabricName,
+        public List<ProtectableItem> GetAzureSiteRecoveryProtectableItem(string fabricName,
             string protectionContainerName)
         {
-            ProtectableItemListResponse output = new ProtectableItemListResponse();
-            List<ProtectableItem> protectableItems = new List<ProtectableItem>();
-            ProtectableItemListResponse response = this
-                .GetSiteRecoveryClient()
-                .ProtectableItem.List(fabricName, protectionContainerName, null, null, null, this.GetRequestHeaders());
-            protectableItems.AddRange(response.ProtectableItems);
-            while (response.NextLink != null)
-            {
-                response = this
-                    .GetSiteRecoveryClient()
-                    .ProtectableItem.ListNext(response.NextLink, this.GetRequestHeaders());
-                protectableItems.AddRange(response.ProtectableItems);
-            }
-
-            output.ProtectableItems = protectableItems;
-            return output;
+            var pages = this.GetSiteRecoveryClient().ProtectableItemsController.EnumerateProtectableItems(fabricName, protectionContainerName);
+            return Utilities.IpageToList(pages);
         }
 
         /// <summary>
@@ -55,14 +41,11 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <param name="protectionContainerName">Protection Container Name</param>
         /// <param name="replicatedProtectedItemName">Virtual Machine Name</param>
         /// <returns>Replicated Protected Item response</returns>
-        public ProtectableItemResponse GetAzureSiteRecoveryProtectableItem(string fabricName,
+        public ProtectableItem GetAzureSiteRecoveryProtectableItem(string fabricName,
             string protectionContainerName,
             string replicatedProtectedItemName)
         {
-            return
-                this
-                .GetSiteRecoveryClient().
-                ProtectableItem.Get(fabricName, protectionContainerName, replicatedProtectedItemName, this.GetRequestHeaders());
+            return this.GetSiteRecoveryClient().ProtectableItemsController.GetProtectableItem(fabricName, protectionContainerName, replicatedProtectedItemName);
         }
     }
 }

@@ -54,7 +54,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
 
             if (ShouldProcess(this.ProtectionContainerMapping.Name, VerbsCommon.Remove))
             {
-                LongRunningOperationResponse response = null;
+                PSSiteRecoveryLongRunningOperation response = null;
 
                 if (!this.Force.IsPresent)
                 {
@@ -82,11 +82,11 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                         this.ProtectionContainerMapping.Name);
                 }
 
-                JobResponse jobResponse =
+                var jobResponse =
                     RecoveryServicesClient
                     .GetAzureSiteRecoveryJobDetails(PSRecoveryServicesClient.GetJobIdFromReponseLocation(response.Location));
 
-                this.WriteObject(new ASRJob(jobResponse.Job));
+                this.WriteObject(new ASRJob(jobResponse));
             }
         }
     }

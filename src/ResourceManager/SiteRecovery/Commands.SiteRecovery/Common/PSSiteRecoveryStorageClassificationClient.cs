@@ -9,6 +9,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
 {
     public partial class PSRecoveryServicesClient
     {
+        /*
         /// <summary>
         /// Gets all storage classifications associated with a vault.
         /// </summary>
@@ -92,7 +93,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <param name="storageClassificationName">Storage classification name.</param>
         /// <param name="mappingName">Classification mapping name.</param>
         /// <returns>Operation result.</returns>
-        public LongRunningOperationResponse UnmapStorageClassifications(
+        public PSSiteRecoveryLongRunningOperation UnmapStorageClassifications(
             string fabricName,
             string storageClassificationName,
             string mappingName)
@@ -112,7 +113,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <param name="input">Mapping input.</param>
         /// <param name="armName">Optional. ARM name of the mapping.</param>
         /// <returns>Operation response.</returns>
-        public LongRunningOperationResponse MapStorageClassification(
+        public PSSiteRecoveryLongRunningOperation MapStorageClassification(
             ASRStorageClassification primaryClassification,
             StorageClassificationMappingInput input,
             string armName)
@@ -171,5 +172,6 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 ARMResourceIdPaths.FabricResourceIdPath,
                 tokens[0]);
         }
+        */
     }
 }

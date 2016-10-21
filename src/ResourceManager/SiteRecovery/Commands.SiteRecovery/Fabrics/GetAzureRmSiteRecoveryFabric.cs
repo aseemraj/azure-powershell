@@ -74,15 +74,15 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// </summary>
         private void GetByFriendlyName()
         {
-            FabricListResponse fabricListResponse =
+            List<Fabric> fabricListResponse =
                 RecoveryServicesClient.GetAzureSiteRecoveryFabric();
 
             bool found = false;
-            foreach (Fabric fabric in fabricListResponse.Fabrics)
+            foreach (Fabric fabric in fabricListResponse)
             {
                 if (0 == string.Compare(this.FriendlyName, fabric.Properties.FriendlyName, StringComparison.OrdinalIgnoreCase))
                 {
-                    var fabricByName = RecoveryServicesClient.GetAzureSiteRecoveryFabric(fabric.Name).Fabric;
+                    var fabricByName = RecoveryServicesClient.GetAzureSiteRecoveryFabric(fabric.Name);
                     this.WriteFabric(fabricByName);
 
                     found = true;
@@ -109,9 +109,9 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 var fabricResponse =
                     RecoveryServicesClient.GetAzureSiteRecoveryFabric(this.Name);
 
-                if (fabricResponse.Fabric != null)
+                if (fabricResponse != null)
                 {
-                    this.WriteFabric(fabricResponse.Fabric);
+                    this.WriteFabric(fabricResponse);
                 }
             }
             catch (CloudException ex)
@@ -136,10 +136,10 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// </summary>
         private void GetAll()
         {
-            FabricListResponse fabricListResponse =
+            List<Fabric> fabricListResponse =
                 RecoveryServicesClient.GetAzureSiteRecoveryFabric();
 
-            foreach (Fabric fabric in fabricListResponse.Fabrics)
+            foreach (Fabric fabric in fabricListResponse)
             {
                 this.WriteFabric(fabric);
             }

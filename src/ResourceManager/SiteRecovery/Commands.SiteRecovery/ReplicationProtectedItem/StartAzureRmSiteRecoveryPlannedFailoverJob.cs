@@ -209,7 +209,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     {
                         PrimaryKekCertificatePfx = primaryKekCertpfx,
                         SecondaryKekCertificatePfx = secondaryKekCertpfx,
-                        VaultLocation = this.GetCurrentVaultLocation()
+                        VaultLocation = "" // TODO this.GetCurrentVaultLocation()
                     };
                     input.Properties.ProviderSpecificDetails = failoverInput;
                 }
@@ -222,7 +222,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     };
 
                     if (String.Compare(this.CreateVmIfNotFound, Constants.Yes, StringComparison.OrdinalIgnoreCase) == 0 &&
-                        string.Compare(RecoveryServicesClient.GetAzureSiteRecoveryFabric(this.fabricName).Fabric.Properties.CustomDetails.InstanceType, Constants.HyperVSite) == 0)
+                        string.Compare(RecoveryServicesClient.GetAzureSiteRecoveryFabric(this.fabricName).Properties.CustomDetails.InstanceType, Constants.HyperVSite) == 0)
                     {
                         if(this.Server == null || string.Compare(this.Server.FabricType, Constants.HyperVSite) != 0)
                         {
@@ -239,18 +239,18 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 }
             }
 
-            LongRunningOperationResponse response =
+            PSSiteRecoveryLongRunningOperation response =
                 RecoveryServicesClient.StartAzureSiteRecoveryPlannedFailover(
                 this.fabricName,
                 this.protectionContainerName,
                 Utilities.GetValueFromArmId(replicationProtectedItemResponse.ReplicationProtectedItem.Id, ARMResourceTypeConstants.ReplicationProtectedItems),
                 input);
 
-            JobResponse jobResponse =
+            var jobResponse =
                 RecoveryServicesClient
                 .GetAzureSiteRecoveryJobDetails(PSRecoveryServicesClient.GetJobIdFromReponseLocation(response.Location));
 
-            WriteObject(new ASRJob(jobResponse.Job));
+            WriteObject(new ASRJob(jobResponse));
         }
 
         /// <summary>
@@ -280,7 +280,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     {
                         PrimaryKekCertificatePfx = primaryKekCertpfx,
                         SecondaryKekCertificatePfx = secondaryKekCertpfx,
-                        VaultLocation = this.GetCurrentVaultLocation()
+                        VaultLocation = "" // this.GetCurrentVaultLocation()
                     };
                     input.Properties.ProviderSpecificDetails = failoverInput;
                 }
@@ -293,7 +293,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     };
 
                     if (String.Compare(this.CreateVmIfNotFound, Constants.Yes, StringComparison.OrdinalIgnoreCase) == 0 &&
-                        string.Compare(RecoveryServicesClient.GetAzureSiteRecoveryFabric(this.fabricName).Fabric.Properties.CustomDetails.InstanceType, Constants.HyperVSite) == 0)
+                        string.Compare(RecoveryServicesClient.GetAzureSiteRecoveryFabric(this.fabricName).Properties.CustomDetails.InstanceType, Constants.HyperVSite) == 0)
                     {
                         if (this.ServicesProvider == null || string.Compare(this.ServicesProvider.FabricType, Constants.HyperVSite) != 0)
                         {
@@ -310,18 +310,18 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 }
             }
 
-            LongRunningOperationResponse response =
+            PSSiteRecoveryLongRunningOperation response =
                 RecoveryServicesClient.StartAzureSiteRecoveryPlannedFailover(
                 this.fabricName,
                 this.protectionContainerName,
                 this.ReplicationProtectedItem.Name,
                 input);
 
-            JobResponse jobResponse =
+            var jobResponse =
                 RecoveryServicesClient
                 .GetAzureSiteRecoveryJobDetails(PSRecoveryServicesClient.GetJobIdFromReponseLocation(response.Location));
 
-            WriteObject(new ASRJob(jobResponse.Job));
+            WriteObject(new ASRJob(jobResponse));
         }
 
         /// <summary>
@@ -338,7 +338,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 ProviderSpecificDetails = new List<RecoveryPlanProviderSpecificFailoverInput>()
             };
 
-            foreach (string replicationProvider in rp.RecoveryPlan.Properties.ReplicationProviders)
+            foreach (string replicationProvider in rp.Properties.ReplicationProviders)
             {
                 if (0 == string.Compare(
                     replicationProvider,
@@ -349,10 +349,9 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     {
                         var recoveryPlanHyperVReplicaAzureFailoverInput = new RecoveryPlanHyperVReplicaAzureFailoverInput()
                         {
-                            InstanceType = replicationProvider,
                             PrimaryKekCertificatePfx = primaryKekCertpfx,
                             SecondaryKekCertificatePfx = secondaryKekCertpfx,
-                            VaultLocation = this.GetCurrentVaultLocation()
+                            VaultLocation = "" // TODO this.GetCurrentVaultLocation()
                         };
                         recoveryPlanPlannedFailoverInputProperties.ProviderSpecificDetails.Add(recoveryPlanHyperVReplicaAzureFailoverInput);
                     }
@@ -360,7 +359,6 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     {
                         var recoveryPlanHyperVReplicaAzureFailbackInput = new RecoveryPlanHyperVReplicaAzureFailbackInput()
                         {
-                            InstanceType = replicationProvider + "Failback",
                             DataSyncOption = this.Optimize == Constants.ForDownTime ? Constants.ForDownTime : Constants.ForSynchronization,
                             RecoveryVmCreationOption = String.Compare(this.CreateVmIfNotFound, Constants.Yes, StringComparison.OrdinalIgnoreCase) == 0 ? Constants.CreateVmIfNotFound : Constants.NoAction
                         };
@@ -374,15 +372,15 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 Properties = recoveryPlanPlannedFailoverInputProperties
             };
 
-            LongRunningOperationResponse response = RecoveryServicesClient.StartAzureSiteRecoveryPlannedFailover(
+            PSSiteRecoveryLongRunningOperation response = RecoveryServicesClient.StartAzureSiteRecoveryPlannedFailover(
                 this.RecoveryPlan.Name,
                 recoveryPlanPlannedFailoverInput);
 
-            JobResponse jobResponse =
+            var jobResponse =
                 RecoveryServicesClient
                 .GetAzureSiteRecoveryJobDetails(PSRecoveryServicesClient.GetJobIdFromReponseLocation(response.Location));
 
-            WriteObject(new ASRJob(jobResponse.Job));
+            WriteObject(new ASRJob(jobResponse));
         }
     }
 }

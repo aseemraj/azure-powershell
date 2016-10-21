@@ -13,7 +13,7 @@
 // ----------------------------------------------------------------------------------
 
 using Microsoft.Azure.Commands.SiteRecovery.Properties;
-using Microsoft.Azure.Management.SiteRecoveryVault.Models;
+//using Microsoft.Azure.Management.SiteRecoveryVault.Models;
 using System.Management.Automation;
 using System.Net;
 
@@ -42,7 +42,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         public override void ExecuteSiteRecoveryCmdlet()
         {
             base.ExecuteSiteRecoveryCmdlet();
-
+            /*
             RecoveryServicesOperationStatusResponse response = RecoveryServicesClient.DeleteVault(this.Vault.ResourceGroupName, this.Vault.Name);
 
             VaultOperationOutput output = new VaultOperationOutput()
@@ -51,6 +51,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             };
 
             this.WriteObject(output, true);
+            */
         }
     }
 }

@@ -12,7 +12,7 @@
 // limitations under the License.
 // ----------------------------------------------------------------------------------
 
-using Microsoft.Azure.Management.SiteRecoveryVault.Models;
+//using Microsoft.Azure.Management.SiteRecoveryVault.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
@@ -61,27 +61,29 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// Get vaults under a resouce group.
         /// </summary>
         private void GetVaultsUnderResourceGroup()
-        {
+        {/*
             VaultListResponse vaultListResponse =
                 RecoveryServicesClient.GetVaultsInResouceGroup(this.ResourceGroupName);
 
-            this.WriteVaults(vaultListResponse.Vaults);
+            this.WriteVaults(vaultListResponse.Vaults); */
         }
 
         /// <summary>
         /// Get vaults under all resouce group.
         /// </summary>
         private void GetVaultsUnderAllResourceGroups()
-        {
+        {/*
             foreach (var resourceGroup in RecoveryServicesClient.GetResouceGroups().ResourceGroups)
             {
                 VaultListResponse vaultListResponse =
                     RecoveryServicesClient.GetVaultsInResouceGroup(resourceGroup.Name);
 
                 this.WriteVaults(vaultListResponse.Vaults);
-            }
+              
+            }  */
         }
 
+    /*
         /// <summary>
         /// Write Vaults.
         /// </summary>
@@ -101,7 +103,8 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                         this.WriteObject(new ASRVault(vault));
                     }
                 }
-            }
+            }   
         }
+        */
     }
 }

@@ -115,10 +115,12 @@ namespace Microsoft.Azure.Commands.SiteRecovery.Test.ScenarioTests
             }
         }
 
+        /*
         private SiteRecoveryVaultManagementClient GetSiteRecoveryVaultManagementClient(String scenario)
         {
             return GetServiceClient<SiteRecoveryVaultManagementClient>(scenario);
         }
+        */
 
         private SiteRecoveryManagementClient GetSiteRecoveryManagementClient(String scenario)
         {

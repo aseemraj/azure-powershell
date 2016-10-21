@@ -151,15 +151,15 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             string hashedCloudNames = BitConverter.ToString(hashedBytes).ToLower().Replace("-", string.Empty);
 
             string mappingName = string.Format("ContainerMapping_{0}_{1}", this.Policy.Name.ToLower(), hashedCloudNames);
-            LongRunningOperationResponse response = RecoveryServicesClient.ConfigureProtection(
+            PSSiteRecoveryLongRunningOperation response = RecoveryServicesClient.ConfigureProtection(
                 Utilities.GetValueFromArmId(this.PrimaryProtectionContainer.ID, ARMResourceTypeConstants.ReplicationFabrics),
                 this.PrimaryProtectionContainer.Name, mappingName, input);
 
-            JobResponse jobResponse =
+            var jobResponse =
                 RecoveryServicesClient
                 .GetAzureSiteRecoveryJobDetails(PSRecoveryServicesClient.GetJobIdFromReponseLocation(response.Location));
 
-            this.WriteObject(new ASRJob(jobResponse.Job));
+            this.WriteObject(new ASRJob(jobResponse));
         }
 
     }

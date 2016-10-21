@@ -31,9 +31,9 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <summary>
         /// Job response.
         /// </summary>
-        private LongRunningOperationResponse response = null;
+        private PSSiteRecoveryLongRunningOperation response = null;
 
-        JobResponse jobResponse = null;
+        Management.SiteRecovery.Models.Job jobResponse = null;
 
         #region Parameters
 
@@ -105,14 +105,14 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             base.ExecuteSiteRecoveryCmdlet();
 
             var policy = RecoveryServicesClient.GetAzureSiteRecoveryPolicy(
-                Utilities.GetValueFromArmId(this.ProtectionContainerMapping.PolicyId, ARMResourceTypeConstants.Policies)).Policy;
-            var policyInstanceType = policy.Properties.ProviderSpecificDetails.InstanceType;
+                Utilities.GetValueFromArmId(this.ProtectionContainerMapping.PolicyId, ARMResourceTypeConstants.Policies));
+            var policyInstanceType = policy.Properties.ProviderSpecificDetails;
 
             switch (this.ParameterSetName)
             {
                 case ASRParameterSets.EnterpriseToEnterprise:
-                    if (policyInstanceType != Constants.HyperVReplica2012 &&
-                        policyInstanceType != Constants.HyperVReplica2012R2)
+                    if (!(policyInstanceType is HyperVReplicaBasePolicyDetails) &&
+                        !(policyInstanceType is HyperVReplicaBluePolicyDetails))
                     {
                         throw new PSArgumentException(
                             string.Format(
@@ -124,7 +124,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
 
                 case ASRParameterSets.EnterpriseToAzure:
                 case ASRParameterSets.HyperVSiteToAzure:
-                    if (policyInstanceType != Constants.HyperVReplicaAzure)
+                    if (!(policyInstanceType is HyperVReplicaAzurePolicyDetails))
                     {
                         throw new PSArgumentException(
                             string.Format(
@@ -163,23 +163,23 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 if (string.IsNullOrEmpty(this.ProtectableItem.OS))
                 {
                     // Just checked for OS to see whether the disk details got filled up or not
-                    ProtectableItemResponse protectableItemResponse =
+                    var protectableItemResponse =
                         RecoveryServicesClient.GetAzureSiteRecoveryProtectableItem(
                         Utilities.GetValueFromArmId(this.ProtectableItem.ID, ARMResourceTypeConstants.ReplicationFabrics),
                         this.ProtectableItem.ProtectionContainerId,
                         this.ProtectableItem.Name);
 
-                    this.ProtectableItem = new ASRProtectableItem(protectableItemResponse.ProtectableItem);
+                    this.ProtectableItem = new ASRProtectableItem(protectableItemResponse);
                 }
 
                 if (string.IsNullOrWhiteSpace(this.OS))
                 {
-                    providerSettings.OSType = ((string.Compare(this.ProtectableItem.OS, Constants.OSWindows, StringComparison.OrdinalIgnoreCase) == 0) || 
+                    providerSettings.OsType = ((string.Compare(this.ProtectableItem.OS, Constants.OSWindows, StringComparison.OrdinalIgnoreCase) == 0) || 
                         (string.Compare(this.ProtectableItem.OS, Constants.OSLinux) == 0)) ? this.ProtectableItem.OS : Constants.OSWindows;
                 }
                 else
                 {
-                    providerSettings.OSType = this.OS;
+                    providerSettings.OsType = this.OS;
                 }
 
                 if (string.IsNullOrWhiteSpace(this.OSDiskName))
@@ -217,8 +217,9 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 RecoveryServicesClient
                 .GetAzureSiteRecoveryJobDetails(PSRecoveryServicesClient.GetJobIdFromReponseLocation(response.Location));
 
-            WriteObject(new ASRJob(jobResponse.Job));
+            WriteObject(new ASRJob(jobResponse));
 
+            /*
             if (this.WaitForCompletion.IsPresent)
             {
                 this.WaitForJobCompletion(this.jobResponse.Job.Name);
@@ -227,8 +228,9 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 RecoveryServicesClient
                 .GetAzureSiteRecoveryJobDetails(PSRecoveryServicesClient.GetJobIdFromReponseLocation(response.Location));
 
-                WriteObject(new ASRJob(jobResponse.Job));
+                WriteObject(new ASRJob(jobResponse));
             }
+            */
         }
 
         /// <summary>

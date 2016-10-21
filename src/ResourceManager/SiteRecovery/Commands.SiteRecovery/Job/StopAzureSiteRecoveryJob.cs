@@ -65,13 +65,13 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// </summary>
         private void StopByName()
         {
-            LongRunningOperationResponse response = RecoveryServicesClient.CancelAzureSiteRecoveryJob(this.Name);
+            PSSiteRecoveryLongRunningOperation response = RecoveryServicesClient.CancelAzureSiteRecoveryJob(this.Name);
 
-            JobResponse jobResponse =
+            var jobResponse =
                 RecoveryServicesClient
                 .GetAzureSiteRecoveryJobDetails(PSRecoveryServicesClient.GetJobIdFromReponseLocation(response.Location));
 
-            WriteObject(new ASRJob(jobResponse.Job));
+            WriteObject(new ASRJob(jobResponse));
         }
     }
 }

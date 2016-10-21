@@ -31,17 +31,12 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <param name="protectionContainerName">Protection container name.</param>
         /// <param name="replicationProtectedItemName">Replication protected item name.</param>
         /// <returns>List of recovery points.</returns>
-        public RecoveryPointListResponse GetAzureSiteRecoveryRecoveryPoint(string fabricName,
+        public List<RecoveryPoint> GetAzureSiteRecoveryRecoveryPoint(string fabricName,
             string protectionContainerName,
             string replicationProtectedItemName)
         {
-            return this.
-                GetSiteRecoveryClient().
-                RecoveryPoint.
-                List(fabricName, 
-                    protectionContainerName, 
-                    replicationProtectedItemName,
-                    this.GetRequestHeaders());
+            var pages = this.GetSiteRecoveryClient().RecoveryPointsController.EnumerateRecoveryPoints(fabricName, protectionContainerName, replicationProtectedItemName);
+            return Utilities.IpageToList(pages);
         }
 
         /// <summary>
@@ -52,19 +47,12 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <param name="replicationProtectedItemName">Replication protected item name.</param>
         /// <param name="recoveryPointName">Recovery point name.</param>
         /// <returns>Recovery point.</returns>
-        public RecoveryPointResponse GetAzureSiteRecoveryRecoveryPoint(string fabricName,
+        public RecoveryPoint GetAzureSiteRecoveryRecoveryPoint(string fabricName,
             string protectionContainerName,
             string replicationProtectedItemName,
             string recoveryPointName)
         {
-            return this.
-                GetSiteRecoveryClient().
-                RecoveryPoint.
-                Get(fabricName,
-                    protectionContainerName,
-                    replicationProtectedItemName,
-                    recoveryPointName,
-                    this.GetRequestHeaders());
+            return this.GetSiteRecoveryClient().RecoveryPointsController.GetRecoveryPoint(fabricName, protectionContainerName, replicationProtectedItemName, recoveryPointName);
         }
     }
 }

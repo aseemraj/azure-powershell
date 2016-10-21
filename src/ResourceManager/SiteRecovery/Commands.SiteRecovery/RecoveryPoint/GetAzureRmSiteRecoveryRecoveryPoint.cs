@@ -73,6 +73,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// </summary>
         private void GetByName()
         {
+            /*
             try
             {
                 var recoveryPointResponse = RecoveryServicesClient.GetAzureSiteRecoveryRecoveryPoint(
@@ -101,6 +102,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     throw;
                 }
             }
+            */
         }
 
         /// <summary>
@@ -108,14 +110,17 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// </summary>
         private void GetAll()
         {
+            /*
             var recoveryPointListResponse = RecoveryServicesClient.GetAzureSiteRecoveryRecoveryPoint(
                 Utilities.GetValueFromArmId(this.ReplicationProtectedItem.ID, ARMResourceTypeConstants.ReplicationFabrics),
                 Utilities.GetValueFromArmId(this.ReplicationProtectedItem.ID, ARMResourceTypeConstants.ReplicationProtectionContainers),
                 this.ReplicationProtectedItem.Name);
 
             WriteRecoveryPoints(recoveryPointListResponse.RecoveryPoints);
+            */
         }
 
+        /*
         /// <summary>
         /// Write Recovery Points.
         /// </summary>
@@ -133,5 +138,6 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         {
             this.WriteObject(new ASRRecoveryPoint(recoveryPoint));
         }
+        */
     }
 }

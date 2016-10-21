@@ -135,13 +135,13 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 throw new Exception("Cloud is not paired");
             }
 
-            LongRunningOperationResponse response = RecoveryServicesClient.UnConfigureProtection(Utilities.GetValueFromArmId(this.PrimaryProtectionContainer.ID, ARMResourceTypeConstants.ReplicationFabrics), this.PrimaryProtectionContainer.Name, protectionContainerMapping.Name, input);
+            PSSiteRecoveryLongRunningOperation response = RecoveryServicesClient.UnConfigureProtection(Utilities.GetValueFromArmId(this.PrimaryProtectionContainer.ID, ARMResourceTypeConstants.ReplicationFabrics), this.PrimaryProtectionContainer.Name, protectionContainerMapping.Name, input);
 
-            JobResponse jobResponse =
+            var jobResponse =
                 RecoveryServicesClient
                 .GetAzureSiteRecoveryJobDetails(PSRecoveryServicesClient.GetJobIdFromReponseLocation(response.Location));
 
-            this.WriteObject(new ASRJob(jobResponse.Job));
+            this.WriteObject(new ASRJob(jobResponse));
         }
     }
 }

@@ -40,13 +40,13 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         {
             base.ExecuteSiteRecoveryCmdlet();
 
-            LongRunningOperationResponse responseBlue = RecoveryServicesClient.DeletePolicy(this.Policy.Name);
+            PSSiteRecoveryLongRunningOperation responseBlue = RecoveryServicesClient.DeletePolicy(this.Policy.Name);
 
-            JobResponse jobResponseBlue =
+            var jobResponseBlue =
                 RecoveryServicesClient
                 .GetAzureSiteRecoveryJobDetails(PSRecoveryServicesClient.GetJobIdFromReponseLocation(responseBlue.Location));
 
-            WriteObject(new ASRJob(jobResponseBlue.Job));
+            WriteObject(new ASRJob(jobResponseBlue));
         }
     }
 }

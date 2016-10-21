@@ -251,10 +251,10 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 Properties = updatePolicyProperties
             };
 
-            LongRunningOperationResponse responseBlue =
+            PSSiteRecoveryLongRunningOperation responseBlue =
                 RecoveryServicesClient.UpdatePolicy(this.Policy.Name, updatePolicyInput);
 
-            JobResponse jobResponseBlue =
+            var jobResponseBlue =
                 RecoveryServicesClient
                 .GetAzureSiteRecoveryJobDetails(PSRecoveryServicesClient.GetJobIdFromReponseLocation(responseBlue.Location));
 
@@ -323,14 +323,14 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 Properties = updatePolicyProperties
             };
 
-            LongRunningOperationResponse response =
+            PSSiteRecoveryLongRunningOperation response =
                 RecoveryServicesClient.UpdatePolicy(this.Policy.Name, updatePolicyInput);
 
-            JobResponse jobResponse =
+            var jobResponse =
                 RecoveryServicesClient
                 .GetAzureSiteRecoveryJobDetails(PSRecoveryServicesClient.GetJobIdFromReponseLocation(response.Location));
 
-            WriteObject(new ASRJob(jobResponse.Job));
+            WriteObject(new ASRJob(jobResponse));
         }
     }
 }

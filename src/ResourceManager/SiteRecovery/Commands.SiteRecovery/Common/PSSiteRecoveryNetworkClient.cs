@@ -12,8 +12,10 @@
 // limitations under the License.
 // ----------------------------------------------------------------------------------
 
+using AutoMapper;
 using Microsoft.Azure.Management.SiteRecovery;
 using Microsoft.Azure.Management.SiteRecovery.Models;
+using System.Collections.Generic;
 
 namespace Microsoft.Azure.Commands.SiteRecovery
 {
@@ -26,9 +28,10 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// Gets all Azure Site Recovery Networks.
         /// </summary>
         /// <returns>Network list response</returns>
-        public NetworksListResponse GetAzureSiteRecoveryNetworks()
+        public List<Network> GetAzureSiteRecoveryNetworks()
         {
-            return this.GetSiteRecoveryClient().Network.GetAll(this.GetRequestHeaders());
+            var networkPages = this.GetSiteRecoveryClient().NetworksController.EnumerateAllNetworks();
+            return Utilities.IpageToList(networkPages);
         }
 
         /// <summary>
@@ -36,9 +39,10 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// </summary>
         /// <param name="serverId">Server ID</param>
         /// <returns>Network list response</returns>
-        public NetworksListResponse GetAzureSiteRecoveryNetworks(string fabricName)
+        public List<Network> GetAzureSiteRecoveryNetworks(string fabricName)
         {
-            return this.GetSiteRecoveryClient().Network.List(fabricName, this.GetRequestHeaders());
+            var networkPages = this.GetSiteRecoveryClient().NetworksController.EnumerateNetworks(fabricName);
+            return Utilities.IpageToList(networkPages);
         }
 
         /// <summary>
@@ -47,9 +51,9 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <param name="fabricName">Fabric name</param>
         /// <param name="networkName">Network name</param>
         /// <returns>Network response</returns>
-        public NetworkResponse GetAzureSiteRecoveryNetwork(string fabricName, string networkName)
+        public Network GetAzureSiteRecoveryNetwork(string fabricName, string networkName)
         {
-            return this.GetSiteRecoveryClient().Network.Get(fabricName, networkName, this.GetRequestHeaders());
+            return this.GetSiteRecoveryClient().NetworksController.GetNetwork(fabricName, networkName);
         }
     }
 }

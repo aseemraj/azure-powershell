@@ -29,7 +29,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <summary>
         /// Job response.
         /// </summary>
-        private LongRunningOperationResponse response = null;
+        private PSSiteRecoveryLongRunningOperation response = null;
 
         /// <summary>
         /// Gets or sets Protection Entity Object.
@@ -100,7 +100,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         [Parameter]
         public SwitchParameter Force { get; set; }
 
-        JobResponse jobResponse = null;
+        Management.SiteRecovery.Models.Job jobResponse = null;
 
         #endregion Parameters
 
@@ -153,22 +153,22 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                         if (string.IsNullOrEmpty(this.ProtectionEntity.OS))
                         {
                             // Just checked for OS to see whether the disk details got filled up or not
-                            ProtectableItemResponse protectableItemResponse =
+                            var protectableItemResponse =
                                 RecoveryServicesClient.GetAzureSiteRecoveryProtectableItem(
                                 Utilities.GetValueFromArmId(this.ProtectionEntity.ID, ARMResourceTypeConstants.ReplicationFabrics),
                                 this.ProtectionEntity.ProtectionContainerId,
                                 this.ProtectionEntity.Name);
 
-                            this.ProtectionEntity = new ASRProtectionEntity(protectableItemResponse.ProtectableItem);
+                            this.ProtectionEntity = new ASRProtectionEntity(protectableItemResponse);
                         }
 
                         if (string.IsNullOrWhiteSpace(this.OS))
                         {
-                            providerSettings.OSType = ((string.Compare(this.ProtectionEntity.OS, Constants.OSWindows) == 0) || (string.Compare(this.ProtectionEntity.OS, Constants.OSLinux) == 0)) ? this.ProtectionEntity.OS : Constants.OSWindows;
+                            providerSettings.OsType = ((string.Compare(this.ProtectionEntity.OS, Constants.OSWindows) == 0) || (string.Compare(this.ProtectionEntity.OS, Constants.OSLinux) == 0)) ? this.ProtectionEntity.OS : Constants.OSWindows;
                         }
                         else
                         {
-                            providerSettings.OSType = this.OS;
+                            providerSettings.OsType = this.OS;
                         }
 
                         if (string.IsNullOrWhiteSpace(this.OSDiskName))
@@ -211,17 +211,17 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 else
                 {
                     // fetch the latest PE object
-                    ProtectableItemResponse protectableItemResponse =
+                    var protectableItemResponse =
                                                 RecoveryServicesClient.GetAzureSiteRecoveryProtectableItem(Utilities.GetValueFromArmId(this.ProtectionEntity.ID, ARMResourceTypeConstants.ReplicationFabrics),
                                                 this.ProtectionEntity.ProtectionContainerId, this.ProtectionEntity.Name);
-                    ProtectableItem protectableItem = protectableItemResponse.ProtectableItem;
+                    ProtectableItem protectableItem = protectableItemResponse;
 
                     if (!this.Force.IsPresent)
                     {
                         DisableProtectionInput input = new DisableProtectionInput();
                         input.Properties = new DisableProtectionInputProperties()
                         {
-                            ProviderSettings = new DisableProtectionProviderSpecificInput()
+                            ReplicationProviderInput = new DisableProtectionProviderSpecificInput()
                         };
 
                         this.response =
@@ -247,18 +247,20 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     RecoveryServicesClient
                     .GetAzureSiteRecoveryJobDetails(PSRecoveryServicesClient.GetJobIdFromReponseLocation(response.Location));
 
-                WriteObject(new ASRJob(jobResponse.Job));
+                WriteObject(new ASRJob(jobResponse));
 
+                /*
                 if (this.WaitForCompletion.IsPresent)
                 {
-                    this.WaitForJobCompletion(this.jobResponse.Job.Name);
+                    this.WaitForJobCompletion(this.jobResponse.Name);
 
                     jobResponse =
                     RecoveryServicesClient
                     .GetAzureSiteRecoveryJobDetails(PSRecoveryServicesClient.GetJobIdFromReponseLocation(response.Location));
 
-                    WriteObject(new ASRJob(jobResponse.Job));
+                    WriteObject(new ASRJob(jobResponse));
                 }
+                */
             }
         }
 

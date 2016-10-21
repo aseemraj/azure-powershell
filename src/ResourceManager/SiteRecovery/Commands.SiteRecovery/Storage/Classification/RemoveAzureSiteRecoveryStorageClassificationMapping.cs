@@ -40,18 +40,19 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         public override void ExecuteSiteRecoveryCmdlet()
         {
             base.ExecuteSiteRecoveryCmdlet();
-
+            /*
             string[] tokens = StorageClassificationMapping.Id.UnFormatArmId(
                 ARMResourceIdPaths.StorageClassificationMappingResourceIdPath);
             var operationResponse = RecoveryServicesClient.UnmapStorageClassifications(
                 fabricName: tokens[0],
                 storageClassificationName: tokens[1],
                 mappingName: tokens[2]);
-            JobResponse jobResponse =
+            var jobResponse =
                 RecoveryServicesClient.GetAzureSiteRecoveryJobDetails(
                 PSRecoveryServicesClient.GetJobIdFromReponseLocation(operationResponse.Location));
 
-            base.WriteObject(new ASRJob(jobResponse.Job));
+            base.WriteObject(new ASRJob(jobResponse));
+            */
         }
     }
 }

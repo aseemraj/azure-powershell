@@ -55,7 +55,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
 
             if (ShouldProcess(this.Fabric.FriendlyName, VerbsCommon.Remove))
             {
-                LongRunningOperationResponse response;
+                PSSiteRecoveryLongRunningOperation response;
 
                 if (!this.Force.IsPresent)
                 {
@@ -66,11 +66,11 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     response = RecoveryServicesClient.PurgeAzureSiteRecoveryFabric(this.Fabric.Name);
                 }
 
-                JobResponse jobResponse =
+                var jobResponse =
                     RecoveryServicesClient
                     .GetAzureSiteRecoveryJobDetails(PSRecoveryServicesClient.GetJobIdFromReponseLocation(response.Location));
 
-                WriteObject(new ASRJob(jobResponse.Job));
+                WriteObject(new ASRJob(jobResponse));
             }
         }
     }

@@ -230,17 +230,17 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             };
 
             // fetch the latest PE object
-            ProtectableItemResponse protectableItemResponse =
+            var protectableItemResponse =
                                         RecoveryServicesClient.GetAzureSiteRecoveryProtectableItem(this.fabricName,
                                         this.ProtectionEntity.ProtectionContainerId, this.ProtectionEntity.Name);
 
-            ReplicationProtectedItemResponse replicationProtectedItemResponse =
+            var replicationProtectedItemResponse =
                         RecoveryServicesClient.GetAzureSiteRecoveryReplicationProtectedItem(this.fabricName,
-                        this.ProtectionEntity.ProtectionContainerId, Utilities.GetValueFromArmId(protectableItemResponse.ProtectableItem.Properties.ReplicationProtectedItemId, ARMResourceTypeConstants.ReplicationProtectedItems));
+                        this.ProtectionEntity.ProtectionContainerId, Utilities.GetValueFromArmId(protectableItemResponse.Properties.ReplicationProtectedItemId, ARMResourceTypeConstants.ReplicationProtectedItems));
 
-            PolicyResponse policyResponse = RecoveryServicesClient.GetAzureSiteRecoveryPolicy(Utilities.GetValueFromArmId(replicationProtectedItemResponse.ReplicationProtectedItem.Properties.PolicyID, ARMResourceTypeConstants.ReplicationPolicies));
+            var policyResponse = RecoveryServicesClient.GetAzureSiteRecoveryPolicy(Utilities.GetValueFromArmId(replicationProtectedItemResponse.Properties.PolicyId, ARMResourceTypeConstants.ReplicationPolicies));
 
-            this.ProtectionEntity = new ASRProtectionEntity(protectableItemResponse.ProtectableItem, replicationProtectedItemResponse.ReplicationProtectedItem);
+            this.ProtectionEntity = new ASRProtectionEntity(protectableItemResponse, replicationProtectedItemResponse);
 
             if (0 == string.Compare(
                 this.ProtectionEntity.ReplicationProvider,
@@ -253,7 +253,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     {
                         PrimaryKekCertificatePfx = primaryKekCertpfx,
                         SecondaryKekCertificatePfx = secondaryKekCertpfx,
-                        VaultLocation = this.GetCurrentVaultLocation()
+                        VaultLocation = ""// TODO this.GetCurrentVaultLocation()
                     };
 
                     input.Properties.ProviderSpecificDetails = failoverInput;
@@ -264,18 +264,18 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 }
             }
 
-            LongRunningOperationResponse response =
+            PSSiteRecoveryLongRunningOperation response =
                 RecoveryServicesClient.StartAzureSiteRecoveryTestFailover(
                 this.fabricName,
                 this.protectionContainerName,
-                Utilities.GetValueFromArmId(replicationProtectedItemResponse.ReplicationProtectedItem.Id, ARMResourceTypeConstants.ReplicationProtectedItems),
+                Utilities.GetValueFromArmId(replicationProtectedItemResponse.Id, ARMResourceTypeConstants.ReplicationProtectedItems),
                 input);
 
-            JobResponse jobResponse =
+            var jobResponse =
                 RecoveryServicesClient
                 .GetAzureSiteRecoveryJobDetails(PSRecoveryServicesClient.GetJobIdFromReponseLocation(response.Location));
 
-            WriteObject(new ASRJob(jobResponse.Job));
+            WriteObject(new ASRJob(jobResponse));
         }
 
         /// <summary>
@@ -307,7 +307,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     {
                         PrimaryKekCertificatePfx = primaryKekCertpfx,
                         SecondaryKekCertificatePfx = secondaryKekCertpfx,
-                        VaultLocation = this.GetCurrentVaultLocation()
+                        VaultLocation = "" //this.GetCurrentVaultLocation()
                     };
 
                     input.Properties.ProviderSpecificDetails = failoverInput;
@@ -318,18 +318,18 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 }
             }
 
-            LongRunningOperationResponse response =
+            PSSiteRecoveryLongRunningOperation response =
                 RecoveryServicesClient.StartAzureSiteRecoveryTestFailover(
                 this.fabricName,
                 this.protectionContainerName,
                 this.ReplicationProtectedItem.Name,
                 input);
 
-            JobResponse jobResponse =
+            var jobResponse =
                 RecoveryServicesClient
                 .GetAzureSiteRecoveryJobDetails(PSRecoveryServicesClient.GetJobIdFromReponseLocation(response.Location));
 
-            WriteObject(new ASRJob(jobResponse.Job));
+            WriteObject(new ASRJob(jobResponse));
         }
 
         /// <summary>
@@ -359,7 +359,6 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     {
                         var recoveryPlanHyperVReplicaAzureFailoverInput = new RecoveryPlanHyperVReplicaAzureFailoverInput()
                         {
-                            InstanceType = replicationProvider,
                             PrimaryKekCertificatePfx = primaryKekCertpfx,
                             SecondaryKekCertificatePfx = secondaryKekCertpfx,
                             VaultLocation = this.GetCurrentVaultLocation()
@@ -378,15 +377,15 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 Properties = recoveryPlanTestFailoverInputProperties
             };
 
-            LongRunningOperationResponse response = RecoveryServicesClient.StartAzureSiteRecoveryTestFailover(
+            PSSiteRecoveryLongRunningOperation response = RecoveryServicesClient.StartAzureSiteRecoveryTestFailover(
                 this.RecoveryPlan.Name,
                 recoveryPlanTestFailoverInput);
 
-            JobResponse jobResponse =
+            var jobResponse =
                 RecoveryServicesClient
                 .GetAzureSiteRecoveryJobDetails(PSRecoveryServicesClient.GetJobIdFromReponseLocation(response.Location));
 
-            WriteObject(new ASRJob(jobResponse.Job));
+            WriteObject(new ASRJob(jobResponse));
         }
     }
 }

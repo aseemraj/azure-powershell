@@ -62,7 +62,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         public override void ExecuteSiteRecoveryCmdlet()
         {
             base.ExecuteSiteRecoveryCmdlet();
-
+            /*
             List<StorageClassification> storageClassifications = new List<StorageClassification>();
 
             Task storageClassificationTask =
@@ -111,6 +111,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             });
 
             this.WriteObject(psObject, true);
+            */
         }
     }
 }
