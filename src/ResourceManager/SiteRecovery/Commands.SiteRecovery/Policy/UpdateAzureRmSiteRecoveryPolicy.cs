@@ -258,7 +258,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 RecoveryServicesClient
                 .GetAzureSiteRecoveryJobDetails(PSRecoveryServicesClient.GetJobIdFromReponseLocation(responseBlue.Location));
 
-            WriteObject(new ASRJob(jobResponseBlue.Job));
+            WriteObject(new ASRJob(jobResponseBlue));
         }
 
         /// <summary>
@@ -299,7 +299,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             {
                 ApplicationConsistentSnapshotFrequencyInHours = this.applicationConsistentSnapshotFrequencyInHours,
                 Encryption = this.encryption,
-                OnlineIrStartTime = this.replicationStartTime,
+                OnlineReplicationStartTime = this.replicationStartTime,
                 RecoveryPointHistoryDuration = this.recoveryPoints,
                 ReplicationInterval = this.replicationFrequencyInSeconds
             };
@@ -313,7 +313,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 hyperVReplicaAzurePolicyInput.StorageAccounts.Add(storageAccount);
             }
 
-            var updatePolicyProperties = new UpdatePolicyProperties()
+            var updatePolicyProperties = new UpdatePolicyInputProperties()
             {
                 ReplicationProviderSettings = hyperVReplicaAzurePolicyInput
             };

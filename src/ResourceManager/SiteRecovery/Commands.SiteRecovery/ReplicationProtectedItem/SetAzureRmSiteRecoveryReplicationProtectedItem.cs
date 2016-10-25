@@ -154,7 +154,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             if (0 == string.Compare(provider, Constants.HyperVReplicaAzure, StringComparison.OrdinalIgnoreCase))
             {
                 HyperVReplicaAzureReplicationDetails providerSpecificDetails =
-                    (HyperVReplicaAzureReplicationDetails)replicationProtectedItemResponse.ReplicationProtectedItem.Properties.ProviderSpecificDetails;
+                    (HyperVReplicaAzureReplicationDetails)replicationProtectedItemResponse.Properties.ProviderSpecificDetails;
 
                 if (string.IsNullOrEmpty(this.Name))
                 {

@@ -127,7 +127,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             CreateProtectionContainerMappingInputProperties inputProperties = new CreateProtectionContainerMappingInputProperties()
             {
                 PolicyId = this.Policy.ID,
-                ProviderSpecificInput = new ReplicationProviderContainerMappingInput(),
+                ProviderSpecificInput = new ReplicationProviderSpecificContainerMappingInput(),
                 TargetProtectionContainerId = targetProtectionContainerId
             };
 

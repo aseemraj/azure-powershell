@@ -348,7 +348,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 ProviderSpecificDetails = new List<RecoveryPlanProviderSpecificFailoverInput>()
             };
 
-            foreach (string replicationProvider in rp.RecoveryPlan.Properties.ReplicationProviders)
+            foreach (string replicationProvider in rp.Properties.ReplicationProviders)
             {
                 if (0 == string.Compare(
                     replicationProvider,
@@ -361,7 +361,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                         {
                             PrimaryKekCertificatePfx = primaryKekCertpfx,
                             SecondaryKekCertificatePfx = secondaryKekCertpfx,
-                            VaultLocation = this.GetCurrentVaultLocation()
+                            VaultLocation = ""// TODO this.GetCurrentVaultLocation()
                         };
                         recoveryPlanTestFailoverInputProperties.ProviderSpecificDetails.Add(recoveryPlanHyperVReplicaAzureFailoverInput);
                     }

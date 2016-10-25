@@ -127,8 +127,8 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 Properties = inputProperties
             };
 
-            ProtectionContainerMappingListResponse protectionContainerMappingListResponse = RecoveryServicesClient.GetAzureSiteRecoveryProtectionContainerMapping(Utilities.GetValueFromArmId(PrimaryProtectionContainer.ID, ARMResourceTypeConstants.ReplicationFabrics), PrimaryProtectionContainer.Name);
-            ProtectionContainerMapping protectionContainerMapping = protectionContainerMappingListResponse.ProtectionContainerMappings.SingleOrDefault(t => (t.Properties.PolicyId.CompareTo(this.Policy.ID) == 0 && t.Properties.TargetProtectionContainerId.CompareTo(targetProtectionContainerId) == 0));
+            var protectionContainerMappingListResponse = RecoveryServicesClient.GetAzureSiteRecoveryProtectionContainerMapping(Utilities.GetValueFromArmId(PrimaryProtectionContainer.ID, ARMResourceTypeConstants.ReplicationFabrics), PrimaryProtectionContainer.Name);
+            ProtectionContainerMapping protectionContainerMapping = protectionContainerMappingListResponse.SingleOrDefault(t => (t.Properties.PolicyId.CompareTo(this.Policy.ID) == 0 && t.Properties.TargetProtectionContainerId.CompareTo(targetProtectionContainerId) == 0));
 
             if (protectionContainerMapping == null)
             {

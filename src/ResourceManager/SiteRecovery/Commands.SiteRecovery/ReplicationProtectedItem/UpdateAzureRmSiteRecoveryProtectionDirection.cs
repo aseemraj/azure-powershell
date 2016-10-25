@@ -216,7 +216,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     };
 
                     HyperVReplicaAzureReplicationDetails providerSpecificDetails =
-                           (HyperVReplicaAzureReplicationDetails)replicationProtectedItemResponse.ReplicationProtectedItem.Properties.ProviderSpecificDetails;
+                           (HyperVReplicaAzureReplicationDetails)replicationProtectedItemResponse.Properties.ProviderSpecificDetails;
 
                     reprotectInput.StorageAccountId = providerSpecificDetails.RecoveryAzureStorageAccount;
 
