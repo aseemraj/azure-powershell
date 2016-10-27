@@ -480,15 +480,15 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             switch (actionType)
             {
                 case RecoveryPlanActionDetailsType.AutomationRunbookActionDetails:
-                    //outputType = new RecoveryPlanAutomationRunbookActionDetails(); //TODO
+                    outputType = new RecoveryPlanAutomationRunbookActionDetails();
                     break;
 
                 case RecoveryPlanActionDetailsType.ManualActionDetails:
-                    //outputType = new RecoveryPlanManualActionDetails();
+                    outputType = new RecoveryPlanManualActionDetails();
                     break;
 
                 case RecoveryPlanActionDetailsType.ScriptActionDetails:
-                    //outputType = new RecoveryPlanScriptActionDetails();
+                    outputType = new RecoveryPlanScriptActionDetails();
                     break;
             }
 
