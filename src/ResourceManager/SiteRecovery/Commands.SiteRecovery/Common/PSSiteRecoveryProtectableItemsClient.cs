@@ -31,7 +31,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         public List<ProtectableItem> GetAzureSiteRecoveryProtectableItem(string fabricName,
             string protectionContainerName)
         {
-            var pages = this.GetSiteRecoveryClient().ProtectableItemsController.EnumerateProtectableItems(fabricName, protectionContainerName);
+            var pages = this.GetSiteRecoveryClient().ProtectableItems.ListByProtectionContainer(fabricName, protectionContainerName);
             return Utilities.IpageToList(pages);
         }
 
@@ -45,7 +45,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             string protectionContainerName,
             string replicatedProtectedItemName)
         {
-            return this.GetSiteRecoveryClient().ProtectableItemsController.GetProtectableItem(fabricName, protectionContainerName, replicatedProtectedItemName);
+            return this.GetSiteRecoveryClient().ProtectableItems.Get(fabricName, protectionContainerName, replicatedProtectedItemName);
         }
     }
 }

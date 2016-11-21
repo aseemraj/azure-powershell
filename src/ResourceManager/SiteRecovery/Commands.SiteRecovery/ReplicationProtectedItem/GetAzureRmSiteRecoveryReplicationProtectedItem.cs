@@ -93,20 +93,20 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         {
             bool found = false;
 
-            ReplicationProtectedItemListResponse replicationProtectedItemListResponse = RecoveryServicesClient.GetAzureSiteRecoveryReplicationProtectedItem(
+            var replicationProtectedItemListResponse = RecoveryServicesClient.GetAzureSiteRecoveryReplicationProtectedItem(
                 Utilities.GetValueFromArmId(this.ProtectionContainer.ID, ARMResourceTypeConstants.ReplicationFabrics),
                 this.ProtectionContainer.Name);
             ReplicationProtectedItem replicationProtectedItem = 
-                replicationProtectedItemListResponse.ReplicationProtectedItems.SingleOrDefault(t => 
+                replicationProtectedItemListResponse.SingleOrDefault(t => 
                 string.Compare(t.Properties.FriendlyName, this.FriendlyName, StringComparison.OrdinalIgnoreCase) == 0);
 
             if (replicationProtectedItem != null)
             {
-                ReplicationProtectedItemResponse replicationProtectedItemResponse = RecoveryServicesClient.GetAzureSiteRecoveryReplicationProtectedItem(
+                var replicationProtectedItemResponse = RecoveryServicesClient.GetAzureSiteRecoveryReplicationProtectedItem(
                     Utilities.GetValueFromArmId(this.ProtectionContainer.ID, ARMResourceTypeConstants.ReplicationFabrics),
                     this.ProtectionContainer.Name,
                     replicationProtectedItem.Name);
-                WriteReplicationProtectedItem(replicationProtectedItemResponse.ReplicationProtectedItem);
+                WriteReplicationProtectedItem(replicationProtectedItemResponse);
 
                 found = true;
             }
@@ -133,9 +133,9 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     this.ProtectionContainer.Name,
                     this.Name);
 
-                if (replicationProtectedItemResponse.ReplicationProtectedItem != null)
+                if (replicationProtectedItemResponse != null)
                 {
-                    this.WriteReplicationProtectedItem(replicationProtectedItemResponse.ReplicationProtectedItem);
+                    this.WriteReplicationProtectedItem(replicationProtectedItemResponse);
                 }
             }
             catch (CloudException ex)
@@ -162,19 +162,19 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         {
             bool found = false;
 
-            ProtectableItemResponse protectableItemResponse = RecoveryServicesClient.GetAzureSiteRecoveryProtectableItem(
+            var protectableItemResponse = RecoveryServicesClient.GetAzureSiteRecoveryProtectableItem(
                Utilities.GetValueFromArmId(this.ProtectableItem.ID, ARMResourceTypeConstants.ReplicationFabrics),
                     Utilities.GetValueFromArmId(this.ProtectableItem.ID, ARMResourceTypeConstants.ReplicationProtectionContainers),
                     this.ProtectableItem.Name);
 
-            if (protectableItemResponse.ProtectableItem != null)
+            if (protectableItemResponse != null)
             {
-                ReplicationProtectedItemResponse replicationProtectedItemResponse = RecoveryServicesClient.GetAzureSiteRecoveryReplicationProtectedItem(
+                var replicationProtectedItemResponse = RecoveryServicesClient.GetAzureSiteRecoveryReplicationProtectedItem(
                     Utilities.GetValueFromArmId(this.ProtectableItem.ID, ARMResourceTypeConstants.ReplicationFabrics),
                     Utilities.GetValueFromArmId(this.ProtectableItem.ID, ARMResourceTypeConstants.ReplicationProtectionContainers),
-                    Utilities.GetValueFromArmId(protectableItemResponse.ProtectableItem.Properties.ReplicationProtectedItemId, ARMResourceTypeConstants.ReplicationProtectedItems));
+                    Utilities.GetValueFromArmId(protectableItemResponse.Properties.ReplicationProtectedItemId, ARMResourceTypeConstants.ReplicationProtectedItems));
 
-                WriteReplicationProtectedItem(replicationProtectedItemResponse.ReplicationProtectedItem);
+                WriteReplicationProtectedItem(replicationProtectedItemResponse);
 
                 found = true;
             }

@@ -30,7 +30,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Policy list response</returns>
         public List<Policy> GetAzureSiteRecoveryPolicy()
         {
-            var policyPages = this.GetSiteRecoveryClient().PolicyController.EnumeratePolicies();
+            var policyPages = this.GetSiteRecoveryClient().Policies.List();
             return Utilities.IpageToList(policyPages);
         }
 
@@ -42,7 +42,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         public Policy GetAzureSiteRecoveryPolicy(
             string PolicyId)
         {
-            return this.GetSiteRecoveryClient().PolicyController.GetPolicy(
+            return this.GetSiteRecoveryClient().Policies.Get(
                 PolicyId);
         }
 
@@ -55,7 +55,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         public PSSiteRecoveryLongRunningOperation CreatePolicy(string policyName,
             CreatePolicyInput input)
         {
-            var op = this.GetSiteRecoveryClient().PolicyController.CreatePolicyWithHttpMessagesAsync(policyName,
+            var op = this.GetSiteRecoveryClient().Policies.BeginCreateWithHttpMessagesAsync(policyName,
                 input).GetAwaiter().GetResult();
             var result = Mapper.Map<PSSiteRecoveryLongRunningOperation>(op);
             return result;
@@ -69,7 +69,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Long operation response</returns>
         public PSSiteRecoveryLongRunningOperation UpdatePolicy(string policyName, UpdatePolicyInput input)
         {
-            var op = this.GetSiteRecoveryClient().PolicyController.UpdatePolicyWithHttpMessagesAsync(policyName,
+            var op = this.GetSiteRecoveryClient().Policies.BeginUpdateWithHttpMessagesAsync(policyName,
                 input).GetAwaiter().GetResult();
             var result = Mapper.Map<PSSiteRecoveryLongRunningOperation>(op);
             return result;
@@ -82,7 +82,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Long operation response</returns>
         public PSSiteRecoveryLongRunningOperation DeletePolicy(string policyName)
         {
-            var op = this.GetSiteRecoveryClient().PolicyController.DeletePolicyWithHttpMessagesAsync(policyName).GetAwaiter().GetResult();
+            var op = this.GetSiteRecoveryClient().Policies.BeginDeleteWithHttpMessagesAsync(policyName).GetAwaiter().GetResult();
             var result = Mapper.Map<PSSiteRecoveryLongRunningOperation>(op);
             return result;
         }

@@ -117,10 +117,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                         this.VirtualMachine.ProtectionContainerId, Utilities.GetValueFromArmId(protectableItemResponse.Properties.ReplicationProtectedItemId, ARMResourceTypeConstants.ReplicationProtectedItems));
 
             // Check for Replication Provider type HyperVReplicaAzure
-            if (0 != string.Compare(
-                    replicationProtectedItemResponse.Properties.ProviderSpecificDetails.InstanceType,
-                    Constants.HyperVReplicaAzure,
-                    StringComparison.OrdinalIgnoreCase))
+            if (!(replicationProtectedItemResponse.Properties.ProviderSpecificDetails is HyperVReplicaAzureReplicationDetails))
             {
                 this.WriteWarning(Properties.Resources.UnsupportedReplicationProvidedForUpdateVmProperties.ToString());
                 return;

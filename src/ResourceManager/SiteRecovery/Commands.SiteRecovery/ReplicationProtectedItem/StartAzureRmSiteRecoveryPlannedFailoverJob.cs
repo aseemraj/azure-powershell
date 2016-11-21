@@ -222,7 +222,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     };
 
                     if (String.Compare(this.CreateVmIfNotFound, Constants.Yes, StringComparison.OrdinalIgnoreCase) == 0 &&
-                        string.Compare(RecoveryServicesClient.GetAzureSiteRecoveryFabric(this.fabricName).Properties.CustomDetails.InstanceType, Constants.HyperVSite) == 0)
+                        (RecoveryServicesClient.GetAzureSiteRecoveryFabric(this.fabricName).Properties.CustomDetails is HyperVSiteDetails))
                     {
                         if(this.Server == null || string.Compare(this.Server.FabricType, Constants.HyperVSite) != 0)
                         {
@@ -293,7 +293,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     };
 
                     if (String.Compare(this.CreateVmIfNotFound, Constants.Yes, StringComparison.OrdinalIgnoreCase) == 0 &&
-                        string.Compare(RecoveryServicesClient.GetAzureSiteRecoveryFabric(this.fabricName).Properties.CustomDetails.InstanceType, Constants.HyperVSite) == 0)
+                        (RecoveryServicesClient.GetAzureSiteRecoveryFabric(this.fabricName).Properties.CustomDetails is HyperVSiteDetails))
                     {
                         if (this.ServicesProvider == null || string.Compare(this.ServicesProvider.FabricType, Constants.HyperVSite) != 0)
                         {
@@ -334,7 +334,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
 
             var recoveryPlanPlannedFailoverInputProperties = new RecoveryPlanPlannedFailoverInputProperties()
             {
-                FailoverDirection = this.Direction,
+                FailoverDirection = this.Direction == PossibleOperationsDirections.PrimaryToRecovery.ToString() ? PossibleOperationsDirections.PrimaryToRecovery : PossibleOperationsDirections.RecoveryToPrimary,
                 ProviderSpecificDetails = new List<RecoveryPlanProviderSpecificFailoverInput>()
             };
 
@@ -359,8 +359,8 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     {
                         var recoveryPlanHyperVReplicaAzureFailbackInput = new RecoveryPlanHyperVReplicaAzureFailbackInput()
                         {
-                            DataSyncOption = this.Optimize == Constants.ForDownTime ? Constants.ForDownTime : Constants.ForSynchronization,
-                            RecoveryVmCreationOption = String.Compare(this.CreateVmIfNotFound, Constants.Yes, StringComparison.OrdinalIgnoreCase) == 0 ? Constants.CreateVmIfNotFound : Constants.NoAction
+                            DataSyncOption = this.Optimize == Constants.ForDownTime ? DataSyncStatus.ForDownTime : DataSyncStatus.ForSynchronization,
+                            RecoveryVmCreationOption = String.Compare(this.CreateVmIfNotFound, Constants.Yes, StringComparison.OrdinalIgnoreCase) == 0 ? AlternateLocationRecoveryOption.CreateVmIfNotFound : AlternateLocationRecoveryOption.NoAction
                         };
                         recoveryPlanPlannedFailoverInputProperties.ProviderSpecificDetails.Add(recoveryPlanHyperVReplicaAzureFailbackInput);
                     }

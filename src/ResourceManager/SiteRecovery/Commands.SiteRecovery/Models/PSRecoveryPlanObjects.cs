@@ -112,14 +112,14 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             {
                 switch (recoveryPlanGroup.GroupType)
                 {
-                    case Constants.Boot:
+                    case RecoveryPlanGroupType.Boot:
                         groupCount++;
                         groupName = "Group " + groupCount.ToString();
                         break;
-                    case Constants.Failover.ToString():
+                    case RecoveryPlanGroupType.Failover:
                         groupName = Constants.Failover;
                         break;
-                    case Constants.Shutdown.ToString():
+                    case RecoveryPlanGroupType.Shutdown:
                         groupName = Constants.Shutdown;
                         break;
                 }

@@ -196,6 +196,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
 
             if (string.Compare(this.ReplicationProvider, Constants.HyperVReplica2012, StringComparison.OrdinalIgnoreCase) == 0)
             {
+                /*
                 createPolicyInputProperties.ProviderSpecificInput = new HyperVReplica2012PolicyInput()
                 {
                     AllowedAuthenticationType =
@@ -213,10 +214,12 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                          Constants.NotRequired,
                     ReplicationPort = this.ReplicationPort
                 };
+                */
 
             }
             else
             {
+                /*
                 createPolicyInputProperties.ProviderSpecificInput = new HyperVReplica2012R2PolicyInput()
                 {
                     AllowedAuthenticationType =
@@ -235,6 +238,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                     ReplicationFrequencyInSeconds = replicationFrequencyInSeconds,
                     ReplicationPort = this.ReplicationPort
                 };
+                */
             }
 
             var createPolicyInput = new CreatePolicyInput()
@@ -277,7 +281,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 Encryption = this.MyInvocation.BoundParameters.ContainsKey(Utilities.GetMemberName(() => this.Encryption)) ?
                      this.Encryption :
                      Constants.Disable,
-                OnlineIrStartTime = this.ReplicationStartTime,
+               // OnlineReplicationStartTime = this.ReplicationStartTime,
                 RecoveryPointHistoryDuration = this.RecoveryPoints,
                 ReplicationInterval = replicationFrequencyInSeconds
             };

@@ -31,7 +31,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Server list response</returns>
         public List<Fabric> GetAzureSiteRecoveryFabric(bool shouldSignRequest = true)
         {
-            var fabricPages = this.GetSiteRecoveryClient().FabricsController.EnumerateFabrics();
+            var fabricPages = this.GetSiteRecoveryClient().Fabrics.List();
 
             return Utilities.IpageToList(fabricPages);
         }
@@ -43,7 +43,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Server response</returns>
         public Fabric GetAzureSiteRecoveryFabric(string fabricName)
         {
-            return this.GetSiteRecoveryClient().FabricsController.GetFabric(fabricName);
+            return this.GetSiteRecoveryClient().Fabrics.Get(fabricName);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Long operation response</returns>
         public PSSiteRecoveryLongRunningOperation CreateAzureSiteRecoveryFabric(string fabricName, FabricCreationInput input)
         {
-            var op = this.GetSiteRecoveryClient().FabricsController.CreateFabricWithHttpMessagesAsync(fabricName, input).GetAwaiter().GetResult();
+            var op = this.GetSiteRecoveryClient().Fabrics.BeginCreateWithHttpMessagesAsync(fabricName, input).GetAwaiter().GetResult();
             var result = Mapper.Map<PSSiteRecoveryLongRunningOperation>(op);
             return result;
         }
@@ -65,7 +65,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Long operation response</returns>
         public PSSiteRecoveryLongRunningOperation DeleteAzureSiteRecoveryFabric(string fabricName)
         {
-            var op = this.GetSiteRecoveryClient().FabricsController.DeleteFabricWithHttpMessagesAsync(fabricName).GetAwaiter().GetResult();
+            var op = this.GetSiteRecoveryClient().Fabrics.BeginDeleteWithHttpMessagesAsync(fabricName).GetAwaiter().GetResult();
             var result = Mapper.Map<PSSiteRecoveryLongRunningOperation>(op);
             return result;
         }
@@ -77,7 +77,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Long operation response</returns>
         public PSSiteRecoveryLongRunningOperation PurgeAzureSiteRecoveryFabric(string fabricName)
         {
-            var op = this.GetSiteRecoveryClient().FabricsController.PurgeFabricWithHttpMessagesAsync(fabricName).GetAwaiter().GetResult();
+            var op = this.GetSiteRecoveryClient().Fabrics.BeginPurgeWithHttpMessagesAsync(fabricName).GetAwaiter().GetResult();
             var result = Mapper.Map<PSSiteRecoveryLongRunningOperation>(op);
             return result;
         }

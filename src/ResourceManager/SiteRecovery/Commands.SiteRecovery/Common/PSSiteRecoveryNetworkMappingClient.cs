@@ -36,8 +36,8 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         public List<NetworkMapping> GetAzureSiteRecoveryNetworkMappings()
         {
             var networkMappingPages = this.GetSiteRecoveryClient()
-                .NetworkMappingsController
-                .EnumerateAllNetworkMappings();
+                .NetworkMappings
+                .List();
             return Utilities.IpageToList(networkMappingPages);
         }
 
@@ -62,8 +62,8 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             input.RecoveryNetworkId = recoveryNetworkId;
 
             var op = this.GetSiteRecoveryClient().
-                NetworkMappingsController
-                .CreateNetworkMappingWithHttpMessagesAsync(
+                NetworkMappings
+                .BeginCreateWithHttpMessagesAsync(
                 primaryFabricName,
                 primaryNetworkName,
                 mappingName,
@@ -85,8 +85,8 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             string mappingName)
         {
             var op = this.GetSiteRecoveryClient().
-                NetworkMappingsController.
-                DeleteNetworkMappingWithHttpMessagesAsync(
+                NetworkMappings.
+                BeginDeleteWithHttpMessagesAsync(
                 primaryFabricName,
                 primaryNetworkName,
                 mappingName).GetAwaiter().GetResult();

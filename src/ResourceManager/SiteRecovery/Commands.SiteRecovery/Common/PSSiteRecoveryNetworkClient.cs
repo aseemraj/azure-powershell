@@ -30,7 +30,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Network list response</returns>
         public List<Network> GetAzureSiteRecoveryNetworks()
         {
-            var networkPages = this.GetSiteRecoveryClient().NetworksController.EnumerateAllNetworks();
+            var networkPages = this.GetSiteRecoveryClient().Networks.List();
             return Utilities.IpageToList(networkPages);
         }
 
@@ -41,7 +41,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Network list response</returns>
         public List<Network> GetAzureSiteRecoveryNetworks(string fabricName)
         {
-            var networkPages = this.GetSiteRecoveryClient().NetworksController.EnumerateNetworks(fabricName);
+            var networkPages = this.GetSiteRecoveryClient().Networks.ListByFabric(fabricName);
             return Utilities.IpageToList(networkPages);
         }
 
@@ -53,7 +53,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Network response</returns>
         public Network GetAzureSiteRecoveryNetwork(string fabricName, string networkName)
         {
-            return this.GetSiteRecoveryClient().NetworksController.GetNetwork(fabricName, networkName);
+            return this.GetSiteRecoveryClient().Networks.Get(fabricName, networkName);
         }
     }
 }

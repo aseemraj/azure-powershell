@@ -30,7 +30,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns></returns>
         public List<RecoveryPlan> GetAzureSiteRecoveryRecoveryPlan()
         {
-            var pages = this.GetSiteRecoveryClient().RecoveryPlansController.EnumerateRecoveryPlans();
+            var pages = this.GetSiteRecoveryClient().RecoveryPlans.List();
             return Utilities.IpageToList(pages);
         }
 
@@ -41,7 +41,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Job response</returns>
         public RecoveryPlan GetAzureSiteRecoveryRecoveryPlan(string recoveryPlanName)
         {
-            return this.GetSiteRecoveryClient().RecoveryPlansController.GetRecoveryPlan(recoveryPlanName);
+            return this.GetSiteRecoveryClient().RecoveryPlans.Get(recoveryPlanName);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Job response</returns>
         public PSSiteRecoveryLongRunningOperation StartAzureSiteRecoveryCommitFailover(string recoveryPlanName)
         {
-            var op = this.GetSiteRecoveryClient().RecoveryPlansController.RecoveryPlanFailoverCommitWithHttpMessagesAsync(recoveryPlanName).GetAwaiter().GetResult();
+            var op = this.GetSiteRecoveryClient().RecoveryPlans.BeginFailoverCommitWithHttpMessagesAsync(recoveryPlanName).GetAwaiter().GetResult();
             var result = Mapper.Map<PSSiteRecoveryLongRunningOperation>(op);
             return result;
         }
@@ -63,7 +63,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Job response</returns>
         public PSSiteRecoveryLongRunningOperation UpdateAzureSiteRecoveryProtection(string recoveryPlanName)
         {
-            var op = this.GetSiteRecoveryClient().RecoveryPlansController.RecoveryPlanReprotectWithHttpMessagesAsync(recoveryPlanName).GetAwaiter().GetResult();
+            var op = this.GetSiteRecoveryClient().RecoveryPlans.BeginReprotectWithHttpMessagesAsync(recoveryPlanName).GetAwaiter().GetResult();
             var result = Mapper.Map<PSSiteRecoveryLongRunningOperation>(op);
             return result;
         }
@@ -76,7 +76,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Job response</returns>
         public PSSiteRecoveryLongRunningOperation StartAzureSiteRecoveryPlannedFailover(string recoveryPlanName, RecoveryPlanPlannedFailoverInput input)
         {
-            var op = this.GetSiteRecoveryClient().RecoveryPlansController.RecoveryPlanPlannedFailoverWithHttpMessagesAsync(recoveryPlanName, input).GetAwaiter().GetResult();
+            var op = this.GetSiteRecoveryClient().RecoveryPlans.BeginPlannedFailoverWithHttpMessagesAsync(recoveryPlanName, input).GetAwaiter().GetResult();
             var result = Mapper.Map<PSSiteRecoveryLongRunningOperation>(op);
             return result;
         }
@@ -89,7 +89,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Job response</returns>
         public PSSiteRecoveryLongRunningOperation StartAzureSiteRecoveryUnplannedFailover(string recoveryPlanName, RecoveryPlanUnplannedFailoverInput input)
         {
-            var op = this.GetSiteRecoveryClient().RecoveryPlansController.RecoveryPlanUnplannedFailoverWithHttpMessagesAsync(recoveryPlanName, input).GetAwaiter().GetResult();
+            var op = this.GetSiteRecoveryClient().RecoveryPlans.BeginUnplannedFailoverWithHttpMessagesAsync(recoveryPlanName, input).GetAwaiter().GetResult();
             var result = Mapper.Map<PSSiteRecoveryLongRunningOperation>(op);
             return result;
         }
@@ -102,7 +102,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Job response</returns>
         public PSSiteRecoveryLongRunningOperation StartAzureSiteRecoveryTestFailover(string recoveryPlanName, RecoveryPlanTestFailoverInput input)
         {
-            var op = this.GetSiteRecoveryClient().RecoveryPlansController.RecoveryPlanTestFailoverWithHttpMessagesAsync(recoveryPlanName, input).GetAwaiter().GetResult();
+            var op = this.GetSiteRecoveryClient().RecoveryPlans.BeginTestFailoverWithHttpMessagesAsync(recoveryPlanName, input).GetAwaiter().GetResult();
             var result = Mapper.Map<PSSiteRecoveryLongRunningOperation>(op);
             return result;
         }
@@ -114,7 +114,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Job response</returns>
         public PSSiteRecoveryLongRunningOperation RemoveAzureSiteRecoveryRecoveryPlan(string recoveryPlanName)
         {
-            var op = this.GetSiteRecoveryClient().RecoveryPlansController.DeleteRecoveryPlanWithHttpMessagesAsync(recoveryPlanName).GetAwaiter().GetResult();
+            var op = this.GetSiteRecoveryClient().RecoveryPlans.BeginDeleteWithHttpMessagesAsync(recoveryPlanName).GetAwaiter().GetResult();
             var result = Mapper.Map<PSSiteRecoveryLongRunningOperation>(op);
             return result;
         }
@@ -127,7 +127,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Job response</returns>
         public PSSiteRecoveryLongRunningOperation CreateAzureSiteRecoveryRecoveryPlan(string recoveryPlanName, CreateRecoveryPlanInput input)
         {
-            var op = this.GetSiteRecoveryClient().RecoveryPlansController.CreateRecoveryPlanWithHttpMessagesAsync(recoveryPlanName, input).GetAwaiter().GetResult();
+            var op = this.GetSiteRecoveryClient().RecoveryPlans.BeginCreateWithHttpMessagesAsync(recoveryPlanName, input).GetAwaiter().GetResult();
             var result = Mapper.Map<PSSiteRecoveryLongRunningOperation>(op);
             return result;
         }
@@ -140,7 +140,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Job response</returns>
         public PSSiteRecoveryLongRunningOperation UpdateAzureSiteRecoveryRecoveryPlan(string recoveryPlanName, UpdateRecoveryPlanInput input)
         {
-            var op = this.GetSiteRecoveryClient().RecoveryPlansController.UpdateRecoveryPlanWithHttpMessagesAsync(recoveryPlanName, input).GetAwaiter().GetResult();
+            var op = this.GetSiteRecoveryClient().RecoveryPlans.BeginUpdateWithHttpMessagesAsync(recoveryPlanName, input).GetAwaiter().GetResult();
             var result = Mapper.Map<PSSiteRecoveryLongRunningOperation>(op);
             return result;
         }

@@ -32,7 +32,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Job response</returns>
         public Job GetAzureSiteRecoveryJobDetails(string jobName)
         {
-            return this.GetSiteRecoveryClient().JobsController.GetJob(jobName);
+            return this.GetSiteRecoveryClient().Jobs.Get(jobName);
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         public List<Job> GetAzureSiteRecoveryJob(JobQueryParameter jqp)
         {
             ODataQuery<JobQueryParameter> odataQuery = new ODataQuery<JobQueryParameter>(jqp.ToQueryString().ToString());
-            var jobPages = this.GetSiteRecoveryClient().JobsController.EnumerateJobs();
+            var jobPages = this.GetSiteRecoveryClient().Jobs.List();
 
             return Utilities.IpageToList(jobPages);
         }
@@ -72,7 +72,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         public PSSiteRecoveryLongRunningOperation RestartAzureSiteRecoveryJob(
             string jobName)
         {
-            var op = this.GetSiteRecoveryClient().JobsController.RestartJobWithHttpMessagesAsync(jobName).GetAwaiter().GetResult();
+            var op = this.GetSiteRecoveryClient().Jobs.BeginRestartWithHttpMessagesAsync(jobName).GetAwaiter().GetResult();
             var result = Mapper.Map<PSSiteRecoveryLongRunningOperation>(op);
             return result;
         }
@@ -85,7 +85,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         public PSSiteRecoveryLongRunningOperation CancelAzureSiteRecoveryJob(
             string jobName)
         {
-            var op = this.GetSiteRecoveryClient().JobsController.CancelJobWithHttpMessagesAsync(jobName).GetAwaiter().GetResult();
+            var op = this.GetSiteRecoveryClient().Jobs.BeginCancelWithHttpMessagesAsync(jobName).GetAwaiter().GetResult();
             var result = Mapper.Map<PSSiteRecoveryLongRunningOperation>(op);
             return result;
         }

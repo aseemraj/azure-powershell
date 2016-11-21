@@ -215,7 +215,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         {
             CreateRecoveryPlanInputProperties createRecoveryPlanInputProperties = new CreateRecoveryPlanInputProperties()
             {
-                FailoverDeploymentModel = Int32.Parse(failoverDeploymentModel), // TODO
+                FailoverDeploymentModel = failoverDeploymentModel == Microsoft.Azure.Management.SiteRecovery.Models.FailoverDeploymentModel.Classic.ToString() ? Microsoft.Azure.Management.SiteRecovery.Models.FailoverDeploymentModel.Classic : Management.SiteRecovery.Models.FailoverDeploymentModel.ResourceManager,//Int32.Parse(failoverDeploymentModel), // TODO
                 Groups = new List<RecoveryPlanGroup>(),
                 PrimaryFabricId = this.primaryserver,
                 RecoveryFabricId = this.recoveryserver
@@ -223,7 +223,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
 
             RecoveryPlanGroup recoveryPlanGroup = new RecoveryPlanGroup()
             {
-                GroupType = Constants.Boot,
+                GroupType = RecoveryPlanGroupType.Boot,
                 ReplicationProtectedItems = new List<RecoveryPlanProtectedItem>(),
                 StartGroupActions = new List<RecoveryPlanAction>(),
                 EndGroupActions = new List<RecoveryPlanAction>()
@@ -275,7 +275,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         {
             CreateRecoveryPlanInputProperties createRecoveryPlanInputProperties = new CreateRecoveryPlanInputProperties()
             {
-                FailoverDeploymentModel = failoverDeploymentModel,
+                //FailoverDeploymentModel = failoverDeploymentModel,
                 Groups = new List<RecoveryPlanGroup>(),
                 PrimaryFabricId = this.primaryserver,
                 RecoveryFabricId = this.recoveryserver
@@ -283,7 +283,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
 
             RecoveryPlanGroup recoveryPlanGroup = new RecoveryPlanGroup()
             {
-                GroupType = Constants.Boot,
+                GroupType = RecoveryPlanGroupType.Boot,
                 ReplicationProtectedItems = new List<RecoveryPlanProtectedItem>(),
                 StartGroupActions = new List<RecoveryPlanAction>(),
                 EndGroupActions = new List<RecoveryPlanAction>()
@@ -332,7 +332,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         {
             CreateRecoveryPlanInputProperties createRecoveryPlanInputProperties = new CreateRecoveryPlanInputProperties()
             {
-                FailoverDeploymentModel = recoveryPlan.Properties.FailoverDeploymentModel,
+                //FailoverDeploymentModel = recoveryPlan.Properties.FailoverDeploymentModel,
                 Groups = recoveryPlan.Properties.Groups,
                 PrimaryFabricId = recoveryPlan.Properties.PrimaryFabricId,
                 RecoveryFabricId = recoveryPlan.Properties.RecoveryFabricId

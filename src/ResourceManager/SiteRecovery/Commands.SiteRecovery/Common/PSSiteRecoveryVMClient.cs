@@ -36,7 +36,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             string replicationProtectedItemName,
             UpdateReplicationProtectedItemInput input)
         {
-            var op = this.GetSiteRecoveryClient().ReplicationProtectedItemsController.UpdateProtectionWithHttpMessagesAsync(fabricName, protectionContainerName, replicationProtectedItemName, input).GetAwaiter().GetResult();
+            var op = this.GetSiteRecoveryClient().ReplicationProtectedItems.UpdateWithHttpMessagesAsync(fabricName, protectionContainerName, replicationProtectedItemName, input).GetAwaiter().GetResult();
             var result = Mapper.Map<PSSiteRecoveryLongRunningOperation>(op);
             return result;
         }

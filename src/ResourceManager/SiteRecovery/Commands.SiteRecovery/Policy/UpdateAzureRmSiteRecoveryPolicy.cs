@@ -213,17 +213,17 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 this.ReplicaDeletion :
                 replicationProviderSettings.ReplicaDeletionOption;
                 
-            var updatePolicyProperties = new UpdatePolicyProperties();
+            var updatePolicyProperties = new UpdatePolicyInputProperties();
 
             if (string.Compare(this.Policy.ReplicationProvider, Constants.HyperVReplica2012, StringComparison.OrdinalIgnoreCase) == 0)
             {
-                updatePolicyProperties.ReplicationProviderSettings = new HyperVReplica2012PolicyInput()
+                updatePolicyProperties.ReplicationProviderSettings = new HyperVReplicaPolicyInput()
                 {
                     AllowedAuthenticationType = this.authentication,
                     ApplicationConsistentSnapshotFrequencyInHours = this.applicationConsistentSnapshotFrequencyInHours,
                     Compression = this.compression,
                     InitialReplicationMethod = this.replicationMethod,
-                    OnlineReplicationStartTime = this.replicationStartTime,
+                    OnlineReplicationStartTime = this.replicationStartTime.ToString(),
                     RecoveryPoints = this.recoveryPoints,
                     ReplicaDeletion = this.replicaDeletion,
                     ReplicationPort = this.replicationPort
@@ -232,13 +232,13 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             }
             else
             {
-                updatePolicyProperties.ReplicationProviderSettings = new HyperVReplica2012R2PolicyInput()
+                updatePolicyProperties.ReplicationProviderSettings = new HyperVReplicaBluePolicyInput()
                 {
                     AllowedAuthenticationType = this.authentication,
                     ApplicationConsistentSnapshotFrequencyInHours = this.applicationConsistentSnapshotFrequencyInHours,
                     Compression = this.compression,
                     InitialReplicationMethod = this.replicationMethod,
-                    OnlineReplicationStartTime = this.replicationStartTime,
+                    OnlineReplicationStartTime = this.replicationStartTime.ToString(),
                     RecoveryPoints = this.recoveryPoints,
                     ReplicaDeletion = this.replicaDeletion,                    
                     ReplicationPort = this.replicationPort,
@@ -299,7 +299,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             {
                 ApplicationConsistentSnapshotFrequencyInHours = this.applicationConsistentSnapshotFrequencyInHours,
                 Encryption = this.encryption,
-                OnlineReplicationStartTime = this.replicationStartTime,
+                OnlineReplicationStartTime = this.replicationStartTime.ToString(),
                 RecoveryPointHistoryDuration = this.recoveryPoints,
                 ReplicationInterval = this.replicationFrequencyInSeconds
             };

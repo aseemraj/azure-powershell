@@ -342,7 +342,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
 
             var recoveryPlanTestFailoverInputProperties = new RecoveryPlanTestFailoverInputProperties()
             {
-                FailoverDirection = this.Direction,
+                FailoverDirection = this.Direction == PossibleOperationsDirections.PrimaryToRecovery.ToString() ? PossibleOperationsDirections.PrimaryToRecovery : PossibleOperationsDirections.RecoveryToPrimary,
                 NetworkId = this.networkId,
                 NetworkType = this.networkType,
                 ProviderSpecificDetails = new List<RecoveryPlanProviderSpecificFailoverInput>()

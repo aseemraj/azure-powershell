@@ -96,7 +96,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
                 case ASRParameterSets.AppendGroup:
                     RecoveryPlanGroup recoveryPlanGroup = new RecoveryPlanGroup()
                     {
-                        GroupType = Constants.Boot,
+                        GroupType = RecoveryPlanGroupType.Boot,
                         ReplicationProtectedItems = new List<RecoveryPlanProtectedItem>(),
                         StartGroupActions = new List<RecoveryPlanAction>(),
                         EndGroupActions = new List<RecoveryPlanAction>()

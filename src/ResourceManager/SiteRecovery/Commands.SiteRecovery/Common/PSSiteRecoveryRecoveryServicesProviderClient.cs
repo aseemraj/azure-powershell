@@ -31,7 +31,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Recovery Services Provider list response</returns>
         public List<RecoveryServicesProvider> GetAzureSiteRecoveryProvider(string fabricId)
         {
-            var pages = this.GetSiteRecoveryClient().RecoveryServicesProviderController.EnumerateProviders(fabricId);
+            var pages = this.GetSiteRecoveryClient().RecoveryServicesProvider.ListByFabric(fabricId);
             return Utilities.IpageToList(pages);
         }
 
@@ -43,7 +43,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Provider response</returns>
         public RecoveryServicesProvider GetAzureSiteRecoveryProvider(string fabricId, string providerId)
         {
-            return this.GetSiteRecoveryClient().RecoveryServicesProviderController.GetProvider(fabricId, providerId);
+            return this.GetSiteRecoveryClient().RecoveryServicesProvider.Get(fabricId, providerId);
         }
 
 
@@ -55,7 +55,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Provider response</returns>
         public PSSiteRecoveryLongRunningOperation RemoveAzureSiteRecoveryProvider(string fabricId, string providerId)
         {
-            var op = this.GetSiteRecoveryClient().RecoveryServicesProviderController.DeleteProviderWithHttpMessagesAsync(fabricId, providerId).GetAwaiter().GetResult();
+            var op = this.GetSiteRecoveryClient().RecoveryServicesProvider.BeginDeleteWithHttpMessagesAsync(fabricId, providerId).GetAwaiter().GetResult();
             var result = Mapper.Map<PSSiteRecoveryLongRunningOperation>(op);
             return result;
         }
@@ -68,7 +68,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Provider response</returns>
         public PSSiteRecoveryLongRunningOperation PurgeAzureSiteRecoveryProvider(string fabricId, string providerId)
         {
-            var op = this.GetSiteRecoveryClient().RecoveryServicesProviderController.PurgeProviderWithHttpMessagesAsync(fabricId, providerId).GetAwaiter().GetResult();
+            var op = this.GetSiteRecoveryClient().RecoveryServicesProvider.BeginPurgeWithHttpMessagesAsync(fabricId, providerId).GetAwaiter().GetResult();
             var result = Mapper.Map<PSSiteRecoveryLongRunningOperation>(op);
             return result;
         }
@@ -81,7 +81,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Operation response</returns>
         public PSSiteRecoveryLongRunningOperation RefreshAzureSiteRecoveryProvider(string fabricId, string providerId)
         {
-            var op = this.GetSiteRecoveryClient().RecoveryServicesProviderController.RefreshProviderWithHttpMessagesAsync(fabricId, providerId).GetAwaiter().GetResult();
+            var op = this.GetSiteRecoveryClient().RecoveryServicesProvider.BeginRefreshProviderWithHttpMessagesAsync(fabricId, providerId).GetAwaiter().GetResult();
             var result = Mapper.Map<PSSiteRecoveryLongRunningOperation>(op);
             return result;
         }

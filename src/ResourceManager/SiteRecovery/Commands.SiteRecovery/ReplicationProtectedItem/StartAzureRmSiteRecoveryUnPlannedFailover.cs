@@ -267,8 +267,8 @@ namespace Microsoft.Azure.Commands.SiteRecovery
 
             var recoveryPlanUnplannedFailoverInputProperties = new RecoveryPlanUnplannedFailoverInputProperties()
             {
-                FailoverDirection = this.Direction,
-                SourceSiteOperations = this.PerformSourceSideActions ? "Required" : "NotRequired", //Required|NotRequired
+                FailoverDirection = this.Direction == PossibleOperationsDirections.PrimaryToRecovery.ToString()? PossibleOperationsDirections.PrimaryToRecovery : PossibleOperationsDirections.RecoveryToPrimary,
+                SourceSiteOperations = this.PerformSourceSideActions ? SourceSiteOperations.Required : SourceSiteOperations.NotRequired, //Required|NotRequired
                 ProviderSpecificDetails = new List<RecoveryPlanProviderSpecificFailoverInput>()
             };
 

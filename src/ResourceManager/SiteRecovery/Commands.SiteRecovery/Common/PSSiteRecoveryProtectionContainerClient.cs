@@ -30,7 +30,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Protection Container list response</returns>
         public List<ProtectionContainer> GetAzureSiteRecoveryProtectionContainer()
         {
-            var pages = this.GetSiteRecoveryClient().ProtectionContainersController.EnumerateAllProtectionContainers();
+            var pages = this.GetSiteRecoveryClient().ProtectionContainers.List();
             return Utilities.IpageToList(pages);
         }
 
@@ -40,7 +40,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         /// <returns>Protection Container list response</returns>
         public List<ProtectionContainer> GetAzureSiteRecoveryProtectionContainer(string fabricName)
         {
-            var pages = this.GetSiteRecoveryClient().ProtectionContainersController.EnumerateProtectionContainers(fabricName);
+            var pages = this.GetSiteRecoveryClient().ProtectionContainers.ListByFabric(fabricName);
             return Utilities.IpageToList(pages);
         }
 
@@ -52,7 +52,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         public ProtectionContainer GetAzureSiteRecoveryProtectionContainer(string fabricName,
             string protectionContainerName)
         {
-            return this.GetSiteRecoveryClient().ProtectionContainersController.GetProtectionContainer(fabricName, protectionContainerName);
+            return this.GetSiteRecoveryClient().ProtectionContainers.Get(fabricName, protectionContainerName);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         public List<ProtectionContainerMapping> GetAzureSiteRecoveryProtectionContainerMapping(string fabricName,
             string protectionContainerName)
         {
-            var pages = this.GetSiteRecoveryClient().ProtectionContainerMappingsController.EnumerateProtectionContainerMappings(fabricName, protectionContainerName);
+            var pages = this.GetSiteRecoveryClient().ProtectionContainerMappings.ListByProtectionContainer(fabricName, protectionContainerName);
             return Utilities.IpageToList(pages);
         }
 
@@ -78,7 +78,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         public ProtectionContainerMapping GetAzureSiteRecoveryProtectionContainerMapping(string fabricName,
             string protectionContainerName, string mappingName)
         {
-            return this.GetSiteRecoveryClient().ProtectionContainerMappingsController.GetProtectionContainerMapping(fabricName, protectionContainerName, mappingName);
+            return this.GetSiteRecoveryClient().ProtectionContainerMappings.Get(fabricName, protectionContainerName, mappingName);
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         public PSSiteRecoveryLongRunningOperation ConfigureProtection(string fabricName,
             string protectionContainerName, string mappingName, CreateProtectionContainerMappingInput input)
         {
-            var op = this.GetSiteRecoveryClient().ProtectionContainerMappingsController.CreateProtectionContainerMappingWithHttpMessagesAsync(fabricName, protectionContainerName, mappingName, input).GetAwaiter().GetResult();
+            var op = this.GetSiteRecoveryClient().ProtectionContainerMappings.BeginCreateWithHttpMessagesAsync(fabricName, protectionContainerName, mappingName, input).GetAwaiter().GetResult();
             var result = Mapper.Map<PSSiteRecoveryLongRunningOperation>(op);
             return result;
         }
@@ -108,7 +108,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         public PSSiteRecoveryLongRunningOperation UnConfigureProtection(string fabricName,
             string protectionContainerName, string mappingName, RemoveProtectionContainerMappingInput input)
         {
-            var op = this.GetSiteRecoveryClient().ProtectionContainerMappingsController.RemoveProtectionContainerMappingWithHttpMessagesAsync(fabricName, protectionContainerName, mappingName, input).GetAwaiter().GetResult();
+            var op = this.GetSiteRecoveryClient().ProtectionContainerMappings.BeginDeleteWithHttpMessagesAsync(fabricName, protectionContainerName, mappingName, input).GetAwaiter().GetResult();
             var result = Mapper.Map<PSSiteRecoveryLongRunningOperation>(op);
             return result;
         }
@@ -123,7 +123,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
         public PSSiteRecoveryLongRunningOperation PurgeCloudMapping(string fabricName,
             string protectionContainerName, string mappingName)
         {
-            var op = this.GetSiteRecoveryClient().ProtectionContainerMappingsController.PurgeProtectionContainerMappingWithHttpMessagesAsync(fabricName, protectionContainerName, mappingName).GetAwaiter().GetResult();
+            var op = this.GetSiteRecoveryClient().ProtectionContainerMappings.BeginPurgeWithHttpMessagesAsync(fabricName, protectionContainerName, mappingName).GetAwaiter().GetResult();
             var result = Mapper.Map<PSSiteRecoveryLongRunningOperation>(op);
             return result;
         }

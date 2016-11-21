@@ -91,7 +91,7 @@ namespace Microsoft.Azure.Commands.SiteRecovery
             {
                 RecoveryPlanGroup recoveryPlanGroup = new RecoveryPlanGroup()
                 {
-                    GroupType = asrRecoveryPlanGroup.GroupType, //TODO
+                    //GroupType = asrRecoveryPlanGroup.GroupType, //TODO
 
                     // Initialize ReplicationProtectedItems with empty List if asrRecoveryPlanGroup.ReplicationProtectedItems is null
                     // otherwise assign respective values
